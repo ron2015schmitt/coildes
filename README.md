@@ -20,9 +20,11 @@ sudo apt-get install gfortran
 ```
 sudo apt install opam
 opam init
-opam install odepack
 ```
 ### ODEPACK
+```
+opam install odepack
+```
 
 ## matricks library
 
