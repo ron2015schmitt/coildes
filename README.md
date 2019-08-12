@@ -56,7 +56,7 @@ The mātricks library is included as a submodule and is automatically built by t
 
 The package [ODEPACK](https://computing.llnl.gov/casc/odepack/) is used to follow the field lines of the magnetic field configuration.
 
-The only uses the function DLSODE.
+This project only uses the function DLSODE.
 
 The [ODEPACK library mirror from Jacob Williams](https://github.com/jacobwilliams/odepack) is included as a submodule, and is automatically built by the Makefile.
 
