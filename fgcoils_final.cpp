@@ -103,7 +103,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -124,7 +124,7 @@ int main (int argc, char *argv[])
    // display command name
    //   cout << string(myname)<<endl;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -175,8 +175,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
    const double dtheta = 2*M_PI/((double)Ntheta);
@@ -192,8 +192,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    bool mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -257,7 +257,7 @@ int main (int argc, char *argv[])
     
 
 
-   LAvector<complex<double> > FluxF(NFR,"FluxF");
+   Vector<complex<double> > FluxF(NFR,"FluxF");
 
    cout <<endl<< "$ Loading Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,FluxF,false)){
@@ -265,22 +265,22 @@ int main (int argc, char *argv[])
       return 3;
    }
 
-   LAvector<double> Flux(Npts, "Flux");
+   Vector<double> Flux(Npts, "Flux");
    mode00=false;
    ifft2d(Flux,FluxF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI),mode00);
 
 
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
    cout << endl;
    cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -289,8 +289,8 @@ int main (int argc, char *argv[])
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-   LAvector<p3vector<double> > rootn(Npts, "rootn");
-   LAvector<double> J(Npts, "J");
+   Vector<p3vector<double> > rootn(Npts, "rootn");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
       double temp = 1/sqrt(norm(dA_dtdp[j]));
@@ -309,15 +309,15 @@ int main (int argc, char *argv[])
   
    // lay coil surface onto grid 
   
-   LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-   LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+   Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+   Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
-   LAvector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
-   LAvector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
-   LAvector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
-   LAvector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
-   LAvector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
-   LAvector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
+   Vector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
+   Vector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
+   Vector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
+   Vector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
+   Vector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
+   Vector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -421,7 +421,7 @@ int main (int argc, char *argv[])
    // this (Nmodes, FluxFP etc) doesn't have any purpose other
    // than to prep the two codes for merger
    const unsigned int Nmodes = NFR;
-   LAvector<complex<double> > FluxFP(Nmodes,"FluxFP");
+   Vector<complex<double> > FluxFP(Nmodes,"FluxFP");
    FluxFP = FluxF;
 
    Matrix<complex<double> > FG(Nmodes,NFR,"FG"); 
@@ -435,7 +435,7 @@ int main (int argc, char *argv[])
    dispcr(FG.Ncols());
 
 
-   LAvector<double> FGmag(NFR,"FGmag");
+   Vector<double> FGmag(NFR,"FGmag");
 
    for (unsigned int k=0; k<NFR; k++) {
        double temp = 0;
@@ -455,7 +455,7 @@ int main (int argc, char *argv[])
    printcr("calc Flux as projected onto normalized FG functions");
    STARTTIME(tbuff,ckstart);
 
-   LAvector<complex<double> > FluxFG(NFR,"FluxFG");
+   Vector<complex<double> > FluxFG(NFR,"FluxFG");
    FluxFG = (FluxFP|FG)/FGmag;
 
    STOPTIME(tbuff,ckstart);
@@ -470,8 +470,8 @@ int main (int argc, char *argv[])
    save(datavec,fname);
 
 
-   LAvector<unsigned int> FGrank(NFR,"FGrank");
-   LAvector<double> magtemp(NFR,"magtemp");
+   Vector<unsigned int> FGrank(NFR,"FGrank");
+   Vector<double> magtemp(NFR,"magtemp");
    magtemp = FGmag;
    FGrank = sortrevwind(magtemp);
 
@@ -502,13 +502,13 @@ int main (int argc, char *argv[])
       Jmatrix(ll,kk) = 1.0;
       Up(kk,kk) = 1.0;
 
-      LAvector<complex<double> > vold(Nmodes,"vold");
+      Vector<complex<double> > vold(Nmodes,"vold");
       vold = FG.col(ll);
 
-      LAvector<complex<double> > v(Nmodes,"v");
+      Vector<complex<double> > v(Nmodes,"v");
       v = vold;
       for (unsigned int h=0; h<kk; h++) {
-	 LAvector<complex<double> > v_h(Nmodes,"v_h");
+	 Vector<complex<double> > v_h(Nmodes,"v_h");
 	 v_h = FG_ortho.col(h);  
 	 complex<double> ratio = (conj(v_h)|vold)/(conj(v_h)|v_h);
 	 v = v - ratio * v_h;
@@ -550,7 +550,7 @@ int main (int argc, char *argv[])
    printcr("calculate magnitude of orthogonal FGs");
    STARTTIME(tbuff,ckstart);
 
-   LAvector<double> FG_orthomag(N3,"FG_orthomag");
+   Vector<double> FG_orthomag(N3,"FG_orthomag");
 
    for (unsigned int k=0; k<N3; k++) {
       double temp = 0;
@@ -571,7 +571,7 @@ int main (int argc, char *argv[])
    printcr("find Dinv and normalize orthogonal FGs");
    STARTTIME(tbuff,ckstart);
 
-   LAvector<double> Dinv(N3,"Dinv");
+   Vector<double> Dinv(N3,"Dinv");
    for (unsigned int kk=0; kk<N3; kk++) {
       double dtemp = 1/FG_orthomag[kk];
       if ( FG_orthomag[kk] == 0) 
@@ -611,7 +611,7 @@ int main (int argc, char *argv[])
    printcr("project flux onto orthofunctions");
    STARTTIME(tbuff,ckstart);
 
-   LAvector<complex<double> > FluxFGo(N3,"FluxFGo");
+   Vector<complex<double> > FluxFGo(N3,"FluxFGo");
    FluxFGo = (FluxFP|FG_ortho);
 
    STOPTIME(tbuff,ckstart);
@@ -689,7 +689,7 @@ int main (int argc, char *argv[])
    cout<<"$ Calculate coil current ("<<NFR<<" x 1)"<<endl;
 
    STARTTIME(tbuff,ckstart);
-   LAvector<complex<double> > IF(NFR,"IF");
+   Vector<complex<double> > IF(NFR,"IF");
    IF = (Ginv|FluxFP);
 
    STOPTIME(tbuff,ckstart);

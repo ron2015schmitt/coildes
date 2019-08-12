@@ -1,8 +1,8 @@
 #include "bfield_ext.hpp"
 
 
-void bTotal(const  COOLL::p3vector<double>& X,  COOLL::p3vector<double>& B) {
-   using namespace COOLL;
+void bTotal(const  Matricks::p3vector<double>& X,  Matricks::p3vector<double>& B) {
+   using namespace Matricks;
 
   p3vector<double> Bp;
   bplasma(X,Bp);

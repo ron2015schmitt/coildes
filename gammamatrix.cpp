@@ -39,15 +39,15 @@ using namespace std;
 void gammamatrix( Matrix<complex<double> > & gamma,
 		  const Matrix<complex<double> >& fs,
 		  const FourierSurface& fsurface, 
-		  const LAvector<p3vector<double> > A,
-		  const LAvector<double>& thetas, const LAvector<double>& phis,
+		  const Vector<p3vector<double> > A,
+		  const Vector<double>& thetas, const Vector<double>& phis,
 		  const unsigned int Ntheta, const unsigned int Nphi) {
 
 
-  const LAvector<double>& nnsurf = fsurface.nn();
-  const LAvector<double>& mmsurf = fsurface.mm();
-  const LAvector<double>& RF = fsurface.RF();
-  const LAvector<double>& ZF = fsurface.ZF();
+  const Vector<double>& nnsurf = fsurface.nn();
+  const Vector<double>& mmsurf = fsurface.mm();
+  const Vector<double>& RF = fsurface.RF();
+  const Vector<double>& ZF = fsurface.ZF();
   const unsigned int Npmodes = mmsurf.size();
   const unsigned int Npts = A.size();
   const unsigned int NF = fs.Ncols();
@@ -55,8 +55,8 @@ void gammamatrix( Matrix<complex<double> > & gamma,
   const double dphi = 2*PI/double(Nphi);
   const double dtheta = 2*PI/double(Ntheta);
 
-  LAvector<double> nr(Npts,"nr");
-  LAvector<double> nz(Npts,"nz");
+  Vector<double> nr(Npts,"nr");
+  Vector<double> nz(Npts,"nz");
   
   for (unsigned int i = 0; i<Npts ; i++) {
     double Amag= sqrt(sqr(A[i].x())+sqr(A[i].y())+sqr(A[i].z()));
@@ -78,10 +78,10 @@ void gammamatrix( Matrix<complex<double> > & gamma,
   }
   const unsigned int Ns=Nr+Nz;
 
-  LAvector<double> m_R(Nr,"m_R");
-  LAvector<double> n_R(Nr,"n_R");
-  LAvector<double> m_Z(Nz,"m_Z");
-  LAvector<double> n_Z(Nz,"n_Z");
+  Vector<double> m_R(Nr,"m_R");
+  Vector<double> n_R(Nr,"n_R");
+  Vector<double> m_Z(Nz,"m_Z");
+  Vector<double> n_Z(Nz,"n_Z");
   unsigned int jr=0;
   unsigned int jz=0;
   for (unsigned int f = 0; f<Npmodes ; f++) {
@@ -122,11 +122,11 @@ void gammamatrix( Matrix<complex<double> > & gamma,
 
 
 void fullgammamatrix( Matrix<complex<double> > & gamma,
-		      const LAvector<double>& nn, const LAvector<double>& mm, 
+		      const Vector<double>& nn, const Vector<double>& mm, 
 		      const Matrix<complex<double> >& fsIN,
 		      const Matrix<complex<double> >& fsOUT,
-		      const LAvector<p3vector<double> > A,
-		      const LAvector<double>& thetas, const LAvector<double>& phis,
+		      const Vector<p3vector<double> > A,
+		      const Vector<double>& thetas, const Vector<double>& phis,
 		      const unsigned int Ntheta, const unsigned int Nphi) 
 {
 
@@ -137,8 +137,8 @@ void fullgammamatrix( Matrix<complex<double> > & gamma,
   const double dphi = 2*PI/double(Nphi);
   const double dtheta = 2*PI/double(Ntheta);
 
-  LAvector<double> nr(Npts,"nr");
-  LAvector<double> nz(Npts,"nz");
+  Vector<double> nr(Npts,"nr");
+  Vector<double> nz(Npts,"nz");
   
   for (unsigned int i = 0; i<Npts ; i++) {
     double Amag= sqrt(sqr(A[i].x())+sqr(A[i].y())+sqr(A[i].z()));

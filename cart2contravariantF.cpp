@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -72,13 +72,13 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -99,14 +99,14 @@ int main (int argc, char *argv[])
 
   // lay plasma surface onto grid
 
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
-  LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-  LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-  LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-  LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-  LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-  LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
+  Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+  Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+  Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+  Vector<p3vector<double> > grad_r(Npts,"grad_r");
+  Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+  Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -124,16 +124,16 @@ int main (int argc, char *argv[])
   cout <<"$ Loading surface data onto "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
 
   //load vector field, B, in cartesian coordinates
-  LAvector<p3vector<double> > B(Npts, "B");
+  Vector<p3vector<double> > B(Npts, "B");
 
   p3vectorformat::textformat(text_nobraces);
   B.textformat(text_nobraces);
   load(B,flux_filename);
 
   //find contravariant components of B
-  LAvector<double> Br(Npts, "Br");
-  LAvector<double> Bt(Npts, "Bt");
-  LAvector<double> Bp(Npts, "Bp");
+  Vector<double> Br(Npts, "Br");
+  Vector<double> Bt(Npts, "Bt");
+  Vector<double> Bp(Npts, "Bp");
 
   printcr("Find contravariant vector components.");
 
@@ -160,11 +160,11 @@ int main (int argc, char *argv[])
   printcr("Find fourier coef's for each contravariant component");
 
   STARTTIME(tbuff,ckstart);
-  LAvector<complex<double> > BrF(NF,"BrF");
+  Vector<complex<double> > BrF(NF,"BrF");
   transformfunction(Br,BrF,fs);
-  LAvector<complex<double> > BtF(NF,"BtF");
+  Vector<complex<double> > BtF(NF,"BtF");
   transformfunction(Bt,BtF,fs);
-  LAvector<complex<double> > BpF(NF,"BpF");
+  Vector<complex<double> > BpF(NF,"BpF");
   transformfunction(Bp,BpF,fs);
   STOPTIME(tbuff,ckstart);
 
@@ -218,7 +218,7 @@ int main (int argc, char *argv[])
 ostringstream strm_r2;
   strm_r2 << flux_rootname << "_sup_r_Fexp" <<".out";
   printcr(strm_r2.str());
-  LAvector<double> BrF_Re(NF,"BrF_Re");
+  Vector<double> BrF_Re(NF,"BrF_Re");
   BrF_Re.perline(1);
   BrF_Re.textformat(text_nobraces);
   BrF_Re =real(BrF);
@@ -227,7 +227,7 @@ ostringstream strm_r2;
   ostringstream strm_theta2;
   strm_theta2 << flux_rootname << "_sup_theta_Fexp" <<".out";
   printcr(strm_theta2.str());
-  LAvector<double> BtF_Re(NF,"BtF_Re");
+  Vector<double> BtF_Re(NF,"BtF_Re");
   BtF_Re.perline(1);
   BtF_Re.textformat(text_nobraces);
   BtF_Re =real(BtF);
@@ -236,7 +236,7 @@ ostringstream strm_r2;
   ostringstream strm_phi2;
   strm_phi2 << flux_rootname << "_sup_phi_Fexp" <<".out";
   printcr(strm_phi2.str());
-  LAvector<double> BpF_Re(NF,"BpF_Re");
+  Vector<double> BpF_Re(NF,"BpF_Re");
   BpF_Re.perline(1);
   BpF_Re.textformat(text_nobraces);
   BpF_Re =real(BpF);

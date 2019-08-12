@@ -14,21 +14,21 @@
 // I FOUND THAT THE PROBLEM WAS ELSEWHERE SO I SHOULD BE ABLE TO
 // CHANGE THIS BACK TO WHAT IT WAS
 
-// LAvector<p3vector<double> > coilPos("coilPos");
-// LAvector<p3vector<double> > coilOrient("coilOrient");
-// LAvector<p3vector<double> > coilPlane("coilPlane");
-// LAvector<double> coilcurrent("coilcurrent");
-// LAvector<double> coilRadius("coilRadius");
-// LAvector<p3vector<double> > Acoil("setupcoils::Acoil");
-//LAvector<p3vector<double> > jcoil("setupcoils::jcoil");
+// Vector<p3vector<double> > coilPos("coilPos");
+// Vector<p3vector<double> > coilOrient("coilOrient");
+// Vector<p3vector<double> > coilPlane("coilPlane");
+// Vector<double> coilcurrent("coilcurrent");
+// Vector<double> coilRadius("coilRadius");
+// Vector<p3vector<double> > Acoil("setupcoils::Acoil");
+//Vector<p3vector<double> > jcoil("setupcoils::jcoil");
 
-LAvector<p3vector<double> > *coilPos;
-LAvector<p3vector<double> > *coilOrient;
-LAvector<p3vector<double> > *coilPlane;
-LAvector<double> *coilcurrent;
-LAvector<double> *coilRadius;
-LAvector<p3vector<double> > *Acoil;
-LAvector<p3vector<double> > *jcoil;
+Vector<p3vector<double> > *coilPos;
+Vector<p3vector<double> > *coilOrient;
+Vector<p3vector<double> > *coilPlane;
+Vector<double> *coilcurrent;
+Vector<double> *coilRadius;
+Vector<p3vector<double> > *Acoil;
+Vector<p3vector<double> > *jcoil;
 
 
 
@@ -103,15 +103,15 @@ int setupcoils(std::string coil_filename, std::string current_filename,
 //  struct tms tbuff;
 //   clock_t ckstart;
 
-   LAvector<double> nn("setupcoils::nn");
-   LAvector<double> mm("setupcoils::mm");
+   Vector<double> nn("setupcoils::nn");
+   Vector<double> mm("setupcoils::mm");
    unsigned int NF;
   bool mode00 = true;
   modevectors(NF,nn,mm,Nnn,Nmm,Nfund,Mfund,mode00);
 
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"setupcoils::thetas");
-   LAvector<double> phis(Npts,"setupcoils::phis");
+   Vector<double> thetas(Npts,"setupcoils::thetas");
+   Vector<double> phis(Npts,"setupcoils::phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
 
@@ -142,11 +142,11 @@ int setupcoils(std::string coil_filename, std::string current_filename,
    // at some point, add code so that user can select type of coef's from command line
  
    cout <<endl<< "$ Loading COIL CURRENT fourier coefficients from " << current_filename << endl;
-   LAvector<complex<double> > IF(NF,"IF");
+   Vector<complex<double> > IF(NF,"IF");
    if (load_coefs(current_filename,CoefFileFormat_sincos,nn,mm,IF))
       return 3;
-//   LAvector<double> IFreal(NF,"IFreal");
-//   LAvector<double> IFimag(NF,"IFimag");
+//   Vector<double> IFreal(NF,"IFreal");
+//   Vector<double> IFimag(NF,"IFimag");
  //  IFreal = real(IF);
 //   IFimag = imag(IF);
  
@@ -165,16 +165,16 @@ int setupcoils(std::string coil_filename, std::string current_filename,
 //    Acoil.resize(Npts);
 //    jcoil.resize(Npts);
 
-   coilPos = new LAvector<p3vector<double> >(Npts,"coilPos");
-   coilOrient = new LAvector<p3vector<double> >(Npts,"coilOrient") ;
-   coilPlane = new LAvector<p3vector<double> >(Npts,"coilPlane");
-   coilcurrent = new LAvector<double>(Npts,"coilcurrent");
-   coilRadius = new LAvector<double>(Npts,"coilRadius"); 
-   Acoil= new LAvector<p3vector<double> >(Npts,"Acoil"); 
-   jcoil = new LAvector<p3vector<double> >(Npts,"jcoil"); 
+   coilPos = new Vector<p3vector<double> >(Npts,"coilPos");
+   coilOrient = new Vector<p3vector<double> >(Npts,"coilOrient") ;
+   coilPlane = new Vector<p3vector<double> >(Npts,"coilPlane");
+   coilcurrent = new Vector<double>(Npts,"coilcurrent");
+   coilRadius = new Vector<double>(Npts,"coilRadius"); 
+   Acoil= new Vector<p3vector<double> >(Npts,"Acoil"); 
+   jcoil = new Vector<p3vector<double> >(Npts,"jcoil"); 
 
 
- //  LAvector<double>  cc(Npts,"coilcurrent");
+ //  Vector<double>  cc(Npts,"coilcurrent");
 
 
 printcr("ifft of current potential");
@@ -183,12 +183,12 @@ printcr("ifft of current potential");
 
 
  
-   LAvector<p3vector<double> > dx_dr(Npts, "setupcoils::dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"setupcoils::dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"setupcoils::dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"setupcoils::grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"setupcoils::grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"setupcoils::grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "setupcoils::dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"setupcoils::dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"setupcoils::dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"setupcoils::grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"setupcoils::grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"setupcoils::grad_phi");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -228,13 +228,13 @@ printcr("ifft of current potential");
     
   printcr("calc current denisty componets in Fourier space");
 
-   LAvector<complex<double> > j_thetaF(NF,"j_thetaF");
-   LAvector<complex<double> > j_phiF(NF,"j_phiF");
+   Vector<complex<double> > j_thetaF(NF,"j_thetaF");
+   Vector<complex<double> > j_phiF(NF,"j_phiF");
    j_thetaF = complex<double>(0,1)*nn*IF;
    j_phiF = complex<double>(0,-1)*mm*IF;
 
-   LAvector<double> j_theta(Npts,"j_theta");
-   LAvector<double> j_phi(Npts,"j_phi");
+   Vector<double> j_theta(Npts,"j_theta");
+   Vector<double> j_phi(Npts,"j_phi");
 
    
 //   expandfunction(j_theta,j_thetaF,fs);

@@ -29,9 +29,9 @@ int load_fourier_surface(const std::string& fname, FourierSurface& fsurface)
 {
   
 
-  COOLL::Matrix<double> Mtemp("load_fourier_surface::Mtemp");
+  Matricks::Matrix<double> Mtemp("load_fourier_surface::Mtemp");
   Mtemp.textformat(text_nobraces);
-  if (COOLL::load(Mtemp,fname)) {
+  if (Matricks::load(Mtemp,fname)) {
     return 1;
   }
 
@@ -59,7 +59,7 @@ int save_fourier_surface(const std::string& fname, const FourierSurface& fsurfac
   stream <<setw(w)<<"COS"<<setw(w)<<"SIN";
 
   const unsigned int Nmodes = fsurface.nn().size();
-  COOLL::Matrix<double> Mtemp(Nmodes,4,"save_fourier_surface::Mtemp");
+  Matricks::Matrix<double> Mtemp(Nmodes,4,"save_fourier_surface::Mtemp");
 
 
   Mtemp.col(0) = fsurface.nn();
@@ -81,14 +81,14 @@ int save_fourier_surface(const std::string& fname, const FourierSurface& fsurfac
 
 
 int save_coefs(const std::string fname, CoefFileFormat format, 
-	       const LAvector<double>& nn, const LAvector<double>& mm,
-	       const LAvector<complex<double> >& xF, const bool rankorder ) {
+	       const Vector<double>& nn, const Vector<double>& mm,
+	       const Vector<complex<double> >& xF, const bool rankorder ) {
 
   const unsigned int w = 19;
   const unsigned int precision = 10;
 
 
-  COOLL::Matrix<double> Atemp("save_coefs::Atemp");
+  Matricks::Matrix<double> Atemp("save_coefs::Atemp");
 
   std::ostringstream stream;
 
@@ -98,10 +98,10 @@ int save_coefs(const std::string fname, CoefFileFormat format,
     {
       stream << "%"<<setw(w-1)<< "n"<<setw(w)<<"m";
       stream <<setw(w)<<"COS"<<setw(w)<<"SIN";
-      LAvector<double> ncosin;
-      LAvector<double> mcosin;
-      LAvector<double> xCOS;
-      LAvector<double> xSIN;
+      Vector<double> ncosin;
+      Vector<double> mcosin;
+      Vector<double> xCOS;
+      Vector<double> xSIN;
       convert_exp2sincos(ncosin,mcosin,xCOS,xSIN,nn,mm,xF);
       const unsigned int Nmodes = xCOS.size();
       Atemp.resize(Nmodes,4);
@@ -124,11 +124,11 @@ int save_coefs(const std::string fname, CoefFileFormat format,
 
 
   const unsigned int Na = Atemp.Nrows();
-  COOLL::Matrix<double> Btemp(Na,4,"save_coefs::Btemp");
+  Matricks::Matrix<double> Btemp(Na,4,"save_coefs::Btemp");
 
   if (rankorder) {
-    LAvector<double> magsqr = sqr(vcast<double>(Atemp.col(2))) + sqr(vcast<double>(Atemp.col(3)));
-    LAvector<unsigned int> indvec(Na,"save_coefs::indvec");
+    Vector<double> magsqr = sqr(vcast<double>(Atemp.col(2))) + sqr(vcast<double>(Atemp.col(3)));
+    Vector<unsigned int> indvec(Na,"save_coefs::indvec");
     indvec = sortwind(magsqr);
     for (unsigned int r=0; r<Na; r++)
       for (unsigned int c=0; c<4; c++)
@@ -156,12 +156,12 @@ int save_coefs(const std::string fname, CoefFileFormat format,
 // nn and mm must be preset using "modevectors()"
 
 int load_coefs(const std::string fname, CoefFileFormat format, 
-	       const LAvector<double>& nn, const LAvector<double>& mm,
-	       LAvector<complex<double> >& xF, const bool giveAllWarnings ) {
+	       const Vector<double>& nn, const Vector<double>& mm,
+	       Vector<complex<double> >& xF, const bool giveAllWarnings ) {
 
-  COOLL::Matrix<double> Mtemp("load_coefs::Mtemp");
+  Matricks::Matrix<double> Mtemp("load_coefs::Mtemp");
   Mtemp.textformat(text_nobraces);
-  if (COOLL::load(Mtemp,fname)) {
+  if (Matricks::load(Mtemp,fname)) {
     std::cerr<<"ERROR: could not open "<<fname<<std::endl;    
     return 1;
   }
@@ -170,16 +170,16 @@ int load_coefs(const std::string fname, CoefFileFormat format,
   switch (format) {
   case CoefFileFormat_sincos:
     {
-      COOLL::LAvector<double> ncopy = nn;
-      COOLL::LAvector<double> mcopy = mm;
+      Matricks::Vector<double> ncopy = nn;
+      Matricks::Vector<double> mcopy = mm;
 	
-      COOLL::LAvector<double> nFILE(Nmodes);
+      Matricks::Vector<double> nFILE(Nmodes);
       nFILE = Mtemp.col(0);
-      COOLL::LAvector<double> mFILE(Nmodes);
+      Matricks::Vector<double> mFILE(Nmodes);
       mFILE = Mtemp.col(1);
-      COOLL::LAvector<double> xcos(Nmodes);
+      Matricks::Vector<double> xcos(Nmodes);
       xcos = Mtemp.col(2);
-      COOLL::LAvector<double> xsin(Nmodes);
+      Matricks::Vector<double> xsin(Nmodes);
       xsin = Mtemp.col(3);
 
       convert_sincos2exp(nFILE,mFILE,xcos,xsin,ncopy,mcopy,xF,giveAllWarnings);      
@@ -189,16 +189,16 @@ int load_coefs(const std::string fname, CoefFileFormat format,
     {
        // this works for converting RightHandCoordinate system to LeftHandCoordinate system
        // AND vice versa!
-      LAvector<double> ncopy = nn;
-      LAvector<double> mcopy = mm;
+      Vector<double> ncopy = nn;
+      Vector<double> mcopy = mm;
 	
-      LAvector<double> nFILE(Nmodes);
+      Vector<double> nFILE(Nmodes);
       nFILE = Mtemp.col(0);
-      LAvector<double> mFILE(Nmodes);
+      Vector<double> mFILE(Nmodes);
       mFILE = Mtemp.col(1);
-      LAvector<double> xcos(Nmodes);
+      Vector<double> xcos(Nmodes);
       xcos = Mtemp.col(2);
-      LAvector<double> xsin(Nmodes);
+      Vector<double> xsin(Nmodes);
       xsin = Mtemp.col(3);
 
 
@@ -260,18 +260,18 @@ int load_garabedian_surface(const std::string& fname, FourierSurface& fsurface)
 {
 
 
-  COOLL::Matrix<double> Mtemp("load_garabedian_surface::Mtemp");
+  Matricks::Matrix<double> Mtemp("load_garabedian_surface::Mtemp");
   Mtemp.textformat(text_nobraces);
-  if (COOLL::load(Mtemp,fname)) {
+  if (Matricks::load(Mtemp,fname)) {
     return 1;
   }
 
   //  dispcr(Mtemp);
   const unsigned int Nmodes = Mtemp.Nrows();
 
-  COOLL::LAvector<double> nn(Nmodes,"load_garabedian_surface::nn");
-  COOLL::LAvector<double> mm(Nmodes,"load_garabedian_surface::mm");
-  COOLL::LAvector<double> del(Nmodes,"load_garabedian_surface::del");
+  Matricks::Vector<double> nn(Nmodes,"load_garabedian_surface::nn");
+  Matricks::Vector<double> mm(Nmodes,"load_garabedian_surface::mm");
+  Matricks::Vector<double> del(Nmodes,"load_garabedian_surface::del");
 
   mm = Mtemp.col(0);
   nn = Mtemp.col(1);
@@ -292,10 +292,10 @@ int load_garabedian_surface(const std::string& fname, FourierSurface& fsurface)
   const unsigned int Nmax = static_cast<unsigned int>(max(abs(nn)));
   const unsigned int Mmax = static_cast<unsigned int>(max(abs(mm)));
   const unsigned int NM2 = (Nmax+1)*(2*Mmax+1);
-  COOLL::LAvector<double> nn2(NM2,"load_garabedian_surface::nn2");
-  COOLL::LAvector<double> mm2(NM2,"load_garabedian_surface::mm2");
-  COOLL::LAvector<double> RF2(NM2,"load_garabedian_surface::RF2");
-  COOLL::LAvector<double> ZF2(NM2,"load_garabedian_surface::ZF2");
+  Matricks::Vector<double> nn2(NM2,"load_garabedian_surface::nn2");
+  Matricks::Vector<double> mm2(NM2,"load_garabedian_surface::mm2");
+  Matricks::Vector<double> RF2(NM2,"load_garabedian_surface::RF2");
+  Matricks::Vector<double> ZF2(NM2,"load_garabedian_surface::ZF2");
   nn2 = 0;
   mm2 = 0;
   RF2 = 0;
@@ -386,18 +386,18 @@ int load_garabedian_current(const std::string& fname, FourierSurface& fsurface)
 {
 
 
-  COOLL::Matrix<double> Mtemp("load_garabedian_current::Mtemp");
+  Matricks::Matrix<double> Mtemp("load_garabedian_current::Mtemp");
   Mtemp.textformat(text_nobraces);
-  if (COOLL::load(Mtemp,fname)) {
+  if (Matricks::load(Mtemp,fname)) {
     return 1;
   }
 
   //  dispcr(Mtemp);
   const unsigned int Nmodes = Mtemp.Nrows();
 
-  COOLL::LAvector<double> nn(Nmodes,"load_garabedian_current::nn");
-  COOLL::LAvector<double> mm(Nmodes,"load_garabedian_current::mm");
-  COOLL::LAvector<double> kappa(Nmodes,"load_garabedian_current::del");
+  Matricks::Vector<double> nn(Nmodes,"load_garabedian_current::nn");
+  Matricks::Vector<double> mm(Nmodes,"load_garabedian_current::mm");
+  Matricks::Vector<double> kappa(Nmodes,"load_garabedian_current::del");
 
   mm = Mtemp.col(0);
   nn = Mtemp.col(1);

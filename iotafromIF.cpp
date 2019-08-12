@@ -69,7 +69,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -77,15 +77,15 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
 
    // Create Fourier Mode vectors
- LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+ Vector<double> nn("nn");
+  Vector<double> mm("mm");
     unsigned int NF;
     bool mode00 = true;
     if ( (Nharm >1) ||(Mharm>1) )
@@ -96,8 +96,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    bool modeR00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -148,11 +148,11 @@ int main (int argc, char *argv[])
   // at some point, add code so that user can select type of coef's from command line
 
   cout <<endl<< "$ Loading COIL CURRENT fourier coefficients from " << current_filename << endl;
-  LAvector<complex<double> > IF(NFR,"IF");
+  Vector<complex<double> > IF(NFR,"IF");
   if (load_coefs(current_filename,CoefFileFormat_sincos,nnR,mmR,IF))
     return 3;  
-  LAvector<double> IFreal(NFR,"IFreal");
-  LAvector<double> IFimag(NFR,"IFimag");
+  Vector<double> IFreal(NFR,"IFreal");
+  Vector<double> IFimag(NFR,"IFimag");
   IFreal = real(IF);
   IFimag = imag(IF);
 
@@ -165,15 +165,15 @@ int main (int argc, char *argv[])
   
   // lay plasma surface onto grid 
   
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-  LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-  LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-  LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-  LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-  LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-  LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+  Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+  Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+  Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+  Vector<p3vector<double> > grad_r(Npts,"grad_r");
+  Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+  Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -182,7 +182,7 @@ int main (int argc, char *argv[])
 
   expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-  LAvector<double> J(Npts, "J");
+  Vector<double> J(Npts, "J");
   for (unsigned int j =0; j<Npts; j++) {
      J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
   }
@@ -192,15 +192,15 @@ int main (int argc, char *argv[])
 
   // lay coil surface onto grid 
   
-  LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-  LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+  Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+  Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
-  LAvector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
-  LAvector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
-  LAvector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
-  LAvector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
-  LAvector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
-  LAvector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
+  Vector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
+  Vector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
+  Vector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
+  Vector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
+  Vector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
+  Vector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
 
   cout << endl;
   cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -246,7 +246,7 @@ int main (int argc, char *argv[])
   cout<<"$ Generating theta inductance matrix ("<<Npts<<" x "<<Npts<<")"<<endl;
 
   STARTTIME(tbuff,ckstart);
-  LAvector<p3vector<double> > Jgradtheta(Npts,"Jgradtheta");
+  Vector<p3vector<double> > Jgradtheta(Npts,"Jgradtheta");
   for (unsigned int j =0; j<Npts; j++) {
     Jgradtheta[j] = J[j] * grad_theta[j];
   }
@@ -274,7 +274,7 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<complex<double> > MFtheta00(NFR,"MFtheta00"); 
+  Vector<complex<double> > MFtheta00(NFR,"MFtheta00"); 
   for (unsigned int k =0; k<NFR; k++) {
     double coef = 1/double(Npts);
      complex<double> temp = 0;
@@ -296,7 +296,7 @@ int main (int argc, char *argv[])
   cout<<"$ Generating phi inductance matrix ("<<Npts<<" x "<<Npts<<")"<<endl;
 
   STARTTIME(tbuff,ckstart);
-  LAvector<p3vector<double> > Jgradphi(Npts,"Jgradphi");
+  Vector<p3vector<double> > Jgradphi(Npts,"Jgradphi");
   for (unsigned int j =0; j<Npts; j++) {
     Jgradphi[j] = J[j] * grad_phi[j];
   }
@@ -324,7 +324,7 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<complex<double> > MFphi00(NFR,"MFphi00"); 
+  Vector<complex<double> > MFphi00(NFR,"MFphi00"); 
   for (unsigned int k =0; k<NFR; k++) {
      double coef = 1/double(Npts);
      complex<double> temp = 0;
@@ -370,7 +370,7 @@ int main (int argc, char *argv[])
   STARTTIME(tbuff,ckstart);
 
   // jcoil is actually j*Jacobian
-  LAvector<p3vector<double> > jcoil(Npts,"jcoil");
+  Vector<p3vector<double> > jcoil(Npts,"jcoil");
   
   double j_theta =  (Ipoloidal)/(2*PI);
   double j_phi =  (Itoroidal)/(2*PI);
@@ -382,7 +382,7 @@ int main (int argc, char *argv[])
   //  save(jcoil,string("iotafromIF.jcoil.out"));
 
 
-  LAvector<p3vector<double> > B2(Npts,"B2");
+  Vector<p3vector<double> > B2(Npts,"B2");
   const double dphi_by_dtheta = 2.0*PI * 2.0*PI/double(Npts);
   const double CBS= mu0div4pi * dphi_by_dtheta;
   for (unsigned int jj = 0; jj<Npts; jj++) {
@@ -402,8 +402,8 @@ int main (int argc, char *argv[])
   printcr("Find contravariant * J vector components for net current B");
 
   STARTTIME(tbuff,ckstart);
-  LAvector<double > JB2t(Npts,"JB2t");
-  LAvector<double > JB2p(Npts,"JB2p"); 
+  Vector<double > JB2t(Npts,"JB2t");
+  Vector<double > JB2p(Npts,"JB2p"); 
   for (unsigned int j = 0; j<Npts; j++) {
      JB2t[j] = J[j] * dot(B2[j],grad_theta[j]);
      JB2p[j] = J[j] * dot(B2[j],grad_phi[j]);

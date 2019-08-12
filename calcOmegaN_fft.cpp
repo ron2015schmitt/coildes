@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -84,8 +84,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
    const double dtheta = 2*M_PI/((double)Ntheta);
@@ -105,8 +105,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -114,8 +114,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -132,7 +132,7 @@ int main (int argc, char *argv[])
 
  
    Matrix<complex<double> > P(NFR,NFR,"V");
-   LAvector<complex<double> >  W(NFR,"W");
+   Vector<complex<double> >  W(NFR,"W");
 
 
    cout << endl;
@@ -153,24 +153,24 @@ int main (int argc, char *argv[])
 
    STARTTIME(tbuff,ckstart);
 
-   LAvector<p3vector<double> > B(Npts, "B");
+   Vector<p3vector<double> > B(Npts, "B");
 
    cout <<endl<< "$ Loading BTOTAL_theta fourier coefficients from " << Bt_filename << endl;
 
-   LAvector<complex<double> > BtF(NF,"BtF");
+   Vector<complex<double> > BtF(NF,"BtF");
    if (load_coefs( Bt_filename,CoefFileFormat_sincos,nn,mm,BtF,false))
       return 5;
 
 
    cout <<endl<< "$ Loading BTOTAL_phi fourier coefficients from " << Bp_filename << endl;
-   LAvector<complex<double> > BpF(NF,"BpF");
+   Vector<complex<double> > BpF(NF,"BpF");
    if (load_coefs( Bp_filename,CoefFileFormat_sincos,nn,mm,BpF,false))
       return 6;
 
-   LAvector<double> Bt(Npts, "Bt");
+   Vector<double> Bt(Npts, "Bt");
    ifft2d(Bt,BtF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI));
    //  expandfunction(Bt,BtF,fs);
-   LAvector<double> Bp(Npts, "Bp");
+   Vector<double> Bp(Npts, "Bp");
    ifft2d(Bp,BpF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI));
    //  expandfunction(Bp,BpF,fs);
 
@@ -211,7 +211,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
 
-   cooll_lapack::eigwincsort(OmegaN,P,W);
+   matricks_lapack::eigwincsort(OmegaN,P,W);
    OmegaN.clear();
      
    STOPTIME(tbuff,ckstart);

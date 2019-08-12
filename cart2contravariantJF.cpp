@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -72,13 +72,13 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -99,14 +99,14 @@ int main (int argc, char *argv[])
 
   // lay plasma surface onto grid
 
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
-  LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-  LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-  LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-  LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-  LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-  LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
+  Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+  Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+  Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+  Vector<p3vector<double> > grad_r(Npts,"grad_r");
+  Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+  Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -124,17 +124,17 @@ int main (int argc, char *argv[])
   cout <<"$ Loading surface data onto "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
 
   //load vector field, B, in cartesian coordinates
-  LAvector<p3vector<double> > B(Npts, "B");
+  Vector<p3vector<double> > B(Npts, "B");
 
   p3vectorformat::textformat(text_nobraces);
   B.textformat(text_nobraces);
   load(B,flux_filename);
 
   //find contravariant components of B
-  LAvector<double> JBr(Npts, "JBr");
-  LAvector<double> JBt(Npts, "JBt");
-  LAvector<double> JBp(Npts, "JBp");
-  LAvector<double> J(Npts, "J");
+  Vector<double> JBr(Npts, "JBr");
+  Vector<double> JBt(Npts, "JBt");
+  Vector<double> JBp(Npts, "JBp");
+  Vector<double> J(Npts, "J");
 
   printcr("Find contravariant*J vector components.");
 
@@ -149,18 +149,18 @@ int main (int argc, char *argv[])
 
 
   //as a test, recreate B
-  LAvector<p3vector<double> > B2(Npts, "B2");
+  Vector<p3vector<double> > B2(Npts, "B2");
   for (unsigned int j =0; j<Npts; j++) {
      B2[j] = JBr[j]*dx_dr[j] + JBt[j]*dx_dtheta[j] + JBp[j]*dx_dphi[j];
      B2[j] = B2[j]/J[j];
   }
 
-  LAvector<p3vector<double> > Bdiff(Npts, "Bdiff");
+  Vector<p3vector<double> > Bdiff(Npts, "Bdiff");
   Bdiff = B2 - B;
 
-  LAvector<double> Bmag(Npts, "Bmag");
-  LAvector<double> B2mag(Npts, "B2mag");
-  LAvector<double> Bdiffmag(Npts, "Bmag");
+  Vector<double> Bmag(Npts, "Bmag");
+  Vector<double> B2mag(Npts, "B2mag");
+  Vector<double> Bdiffmag(Npts, "Bmag");
   for (unsigned int j =0; j<Npts; j++) {
      Bmag[j] = norm(B[j]);
      B2mag[j] = norm(B2[j]);
@@ -190,11 +190,11 @@ int main (int argc, char *argv[])
   printcr("Find fourier coef's for each contravariant*J component");
 
   STARTTIME(tbuff,ckstart);
-  LAvector<complex<double> > JBrF(NF,"JBrF");
+  Vector<complex<double> > JBrF(NF,"JBrF");
   transformfunction(JBr,JBrF,fs);
-  LAvector<complex<double> > JBtF(NF,"JBtF");
+  Vector<complex<double> > JBtF(NF,"JBtF");
   transformfunction(JBt,JBtF,fs);
-  LAvector<complex<double> > JBpF(NF,"JBpF");
+  Vector<complex<double> > JBpF(NF,"JBpF");
   transformfunction(JBp,JBpF,fs);
   STOPTIME(tbuff,ckstart);
 
@@ -251,7 +251,7 @@ int main (int argc, char *argv[])
   ostringstream strm_r2;
   strm_r2 << flux_rootname << "_sup_rJ_Fexp" <<".out";
   printcr(strm_r2.str());
-  LAvector<double> JBrF_Re(NF,"JBrF_Re");
+  Vector<double> JBrF_Re(NF,"JBrF_Re");
   JBrF_Re.perline(1);
   JBrF_Re.textformat(text_nobraces);
   JBrF_Re =real(JBrF);
@@ -260,7 +260,7 @@ int main (int argc, char *argv[])
   ostringstream strm_theta2;
   strm_theta2 << flux_rootname << "_sup_thetaJ_Fexp" <<".out";
   printcr(strm_theta2.str());
-  LAvector<double> JBtF_Re(NF,"JBtF_Re");
+  Vector<double> JBtF_Re(NF,"JBtF_Re");
   JBtF_Re.perline(1);
   JBtF_Re.textformat(text_nobraces);
   JBtF_Re =real(JBtF);
@@ -269,7 +269,7 @@ int main (int argc, char *argv[])
   ostringstream strm_phi2;
   strm_phi2 << flux_rootname << "_sup_phiJ_Fexp" <<".out";
   printcr(strm_phi2.str());
-  LAvector<double> JBpF_Re(NF,"JBpF_Re");
+  Vector<double> JBpF_Re(NF,"JBpF_Re");
   JBpF_Re.perline(1);
   JBpF_Re.textformat(text_nobraces);
   JBpF_Re =real(JBpF);
@@ -279,7 +279,7 @@ int main (int argc, char *argv[])
 
 
 
-  LAvector<complex<double> > JF(NF,"JF");
+  Vector<complex<double> > JF(NF,"JF");
   transformfunction(J,JF,fs);
   massage(JF,1e-10);
   ostringstream strm_JF;
@@ -289,7 +289,7 @@ int main (int argc, char *argv[])
 
 
 
-  LAvector<complex<double> > JdivBF(NF,"JdivBF");
+  Vector<complex<double> > JdivBF(NF,"JdivBF");
   for (unsigned int k =0; k<NF; k++)
      JdivBF[k] = complex<double>(0.0,1.0)*(mm[k]*JBtF[k] + nn[k]*JBpF[k]);
   massage(JdivBF,1e-10);
@@ -311,13 +311,13 @@ int main (int argc, char *argv[])
 //   save(JdivBF,"JdivBF.out");
   ///////////////////////////////////////////////////////////
 
-  LAvector<double> JdivB(Npts, "JdivB");
+  Vector<double> JdivB(Npts, "JdivB");
   expandfunction(JdivB,JdivBF,fs);
 
-  LAvector<double> divB(Npts, "divB");
+  Vector<double> divB(Npts, "divB");
   for (unsigned int j =0; j<Npts; j++)
     divB[j] =  JdivB[j]/J[j];
-  LAvector<complex<double> > divBF(NF,"divBF");
+  Vector<complex<double> > divBF(NF,"divBF");
   transformfunction(divB,divBF,fs);
   massage(divBF,1e-10);
   ostringstream strm_divBF;

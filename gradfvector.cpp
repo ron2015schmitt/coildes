@@ -35,10 +35,10 @@ using namespace std;
 
 
 
-void gradfvector( const LAvector<double>& thetas, const LAvector<double>& phis,
-		  const LAvector<double>& mm, const LAvector<double>& nn, 
-		  const LAvector<p3vector<double> >& grad_theta, 
-		  const LAvector<p3vector<double> >& grad_phi,
+void gradfvector( const Vector<double>& thetas, const Vector<double>& phis,
+		  const Vector<double>& mm, const Vector<double>& nn, 
+		  const Vector<p3vector<double> >& grad_theta, 
+		  const Vector<p3vector<double> >& grad_phi,
 		  Matrix<p3vector<complex<double> > >& grad_f )
 {
   
@@ -50,19 +50,19 @@ void gradfvector( const LAvector<double>& thetas, const LAvector<double>& phis,
   for (unsigned int k=0; k<NF; k++ ) {
     double m = mm[k];
     double n = nn[k];
-    LAvector<double> angle = m*thetas + n*phis;
+    Vector<double> angle = m*thetas + n*phis;
  
       
     // create sin,cos kernals for fourier transform
     // this coef makes the series orthonormal
     const double coef = 1/(2*PI);
-    LAvector<double> sinkern = sin(angle)*coef;
-    LAvector<double> coskern = cos(angle)*coef;
+    Vector<double> sinkern = sin(angle)*coef;
+    Vector<double> coskern = cos(angle)*coef;
 
-    LAvector<double> df_dthetaR = - m*sinkern;
-    LAvector<double> df_dthetaI = m*coskern;
-    LAvector<double> df_dphiR = - n*sinkern;
-    LAvector<double> df_dphiI = n*coskern;
+    Vector<double> df_dthetaR = - m*sinkern;
+    Vector<double> df_dthetaI = m*coskern;
+    Vector<double> df_dphiR = - n*sinkern;
+    Vector<double> df_dphiI = n*coskern;
 
     
 
@@ -81,11 +81,11 @@ void gradfvector( const LAvector<double>& thetas, const LAvector<double>& phis,
 
 
 
-void gradlambda( const LAvector<double>& thetas, const LAvector<double>& phis,
-		 const LAvector<double>& mm, const LAvector<double>& nn, 
-		 const LAvector<complex<double> > lambdaF,
-		 LAvector<double>& dlambda_dtheta, 
-		 LAvector<double>& dlambda_dphi)
+void gradlambda( const Vector<double>& thetas, const Vector<double>& phis,
+		 const Vector<double>& mm, const Vector<double>& nn, 
+		 const Vector<complex<double> > lambdaF,
+		 Vector<double>& dlambda_dtheta, 
+		 Vector<double>& dlambda_dphi)
 {
   
   const unsigned int NF = mm.size();
@@ -95,21 +95,21 @@ void gradlambda( const LAvector<double>& thetas, const LAvector<double>& phis,
   for (unsigned int k=0; k<NF; k++ ) {
     double m = mm[k];
     double n = nn[k];
-    LAvector<double> angle = m*thetas + n*phis;
+    Vector<double> angle = m*thetas + n*phis;
  
       
     // create sin,cos kernals for fourier transform
     // this coef makes the series orthonormal
     const double coef = 1/(2*PI);
-    LAvector<double> sinkern = sin(angle)*coef;
-    LAvector<double> coskern = cos(angle)*coef;
+    Vector<double> sinkern = sin(angle)*coef;
+    Vector<double> coskern = cos(angle)*coef;
 
-    LAvector<double> df_dthetaR = - m*sinkern;
-    LAvector<double> df_dthetaI = m*coskern;
-    LAvector<double> df_dphiR = - n*sinkern;
-    LAvector<double> df_dphiI = n*coskern;
-    LAvector<complex<double> >df_dtheta(Npts);
-    LAvector<complex<double> >df_dphi(Npts);
+    Vector<double> df_dthetaR = - m*sinkern;
+    Vector<double> df_dthetaI = m*coskern;
+    Vector<double> df_dphiR = - n*sinkern;
+    Vector<double> df_dphiI = n*coskern;
+    Vector<complex<double> >df_dtheta(Npts);
+    Vector<complex<double> >df_dphi(Npts);
     
 
     for (unsigned int i=0; i<Npts; i++ ) {

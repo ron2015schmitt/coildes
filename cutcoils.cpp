@@ -86,7 +86,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -94,14 +94,14 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nnR("nn");
-  LAvector<double> mmR("mm");
+  Vector<double> nnR("nn");
+  Vector<double> mmR("mm");
   unsigned int NFR;
   bool mode00 = false;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -111,11 +111,11 @@ int main (int argc, char *argv[])
 
 
   cout <<endl<< "$ Loading COIL CURRENT fourier coefficients from " << current_filename << endl;
-  LAvector<complex<double> > IF(NFR,"IF");
+  Vector<complex<double> > IF(NFR,"IF");
   if (load_coefs(current_filename,CoefFileFormat_sincos,nnR,mmR,IF))
     return 3;  
-  LAvector<double> IFreal(NFR,"IFreal");
-  LAvector<double> IFimag(NFR,"IFimag");
+  Vector<double> IFreal(NFR,"IFreal");
+  Vector<double> IFimag(NFR,"IFimag");
   IFreal = real(IF);
   IFimag = imag(IF);
   // print coef's
@@ -137,11 +137,11 @@ int main (int argc, char *argv[])
 
   // expand current onto theta,phi grid 
 
-  LAvector<double> kappa(Npts,"kappa");
+  Vector<double> kappa(Npts,"kappa");
   expandfunction(kappa,IF,fs);
 
-  LAvector<double> kappa_pol(Npts,"kappa_pol");
-  LAvector<double> kappa_tor(Npts,"kappa_tor");
+  Vector<double> kappa_pol(Npts,"kappa_pol");
+  Vector<double> kappa_tor(Npts,"kappa_tor");
 
   for (unsigned int i = 0; i<Npts; i++) {
      kappa_pol[i] =  Ipoloidal/(2*PI)*phis[i];
@@ -153,7 +153,7 @@ int main (int argc, char *argv[])
   // cutting algortihm
   unsigned int cutfactor = 8;
   unsigned int Ncuts = Nphi/cutfactor;
-  LAvector<double> coil(Npts,"coil");
+  Vector<double> coil(Npts,"coil");
 
 
    double dtheta = 2*M_PI/((double)Ntheta);
@@ -161,12 +161,12 @@ int main (int argc, char *argv[])
 
   vector<double> T;
   vector<double> P;
-  LAvector<int> dtt(8,'dtt');
-  LAvector<int> dpp(8,'dpp');
+  Vector<int> dtt(8,"dtt");
+  Vector<int> dpp(8,"dpp");
     "{-1,-1,-1, 0, 0, 1, 1, 1}" >> dtt;
     "{-1, 0, 1,-1, 1,-1, 0, 1" >> dpp;
-  LAvector<int> pp_next(8,'pp_next');
-  LAvector<int> tt_next(8,'tt_next');
+  Vector<int> pp_next(8,"pp_next");
+  Vector<int> tt_next(8,"tt_next");
   dispcr(dtt);
   dispcr(dpp);
   for (unsigned int n = 0; n<0; n++) {

@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
    // display command name
    //   cout << string(myname)<<endl;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -186,8 +186,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
    const double dtheta = 2*M_PI/((double)Ntheta);
@@ -203,8 +203,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    bool mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -271,15 +271,15 @@ int main (int argc, char *argv[])
 
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
    cout << endl;
    cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -288,7 +288,7 @@ int main (int argc, char *argv[])
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-   LAvector<double> J(Npts, "J");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
    }
@@ -301,15 +301,15 @@ int main (int argc, char *argv[])
   
    // lay coil surface onto grid 
   
-   LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-   LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+   Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+   Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
-   LAvector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
-   LAvector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
-   LAvector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
-   LAvector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
-   LAvector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
-   LAvector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
+   Vector<p3vector<double> > dx_dr_coil(Npts, "dx_dr_coil");
+   Vector<p3vector<double> > dx_dtheta_coil(Npts,"dx_dtheta_coil");
+   Vector<p3vector<double> > dx_dphi_coil(Npts,"dx_dphi_coil");
+   Vector<p3vector<double> > grad_r_coil(Npts,"grad_r_coil");
+   Vector<p3vector<double> > grad_theta_coil(Npts,"grad_theta_coil");
+   Vector<p3vector<double> > grad_phi_coil(Npts,"grad_phi_coil");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -345,15 +345,15 @@ int main (int argc, char *argv[])
 
 
 
-   LAvector<double> fgmag(NFR,"fgmag");
+   Vector<double> fgmag(NFR,"fgmag");
 
-   LAvector<complex<double> > f(Npts,"f");
-   LAvector<complex<double> > fg(Npts,"fg");
+   Vector<complex<double> > f(Npts,"f");
+   Vector<complex<double> > fg(Npts,"fg");
 
-   LAvector<double> M(Npts, "M");
+   Vector<double> M(Npts, "M");
 
    for (unsigned int k = 0; k<NFR ; k++) {
-      LAvector<double> phase(Npts,"phase");
+      Vector<double> phase(Npts,"phase");
       phase= nnR[k]*phis + mmR[k]*thetas;
       f = vcomplex(cos(phase),sin(phase)); 
       //normalize

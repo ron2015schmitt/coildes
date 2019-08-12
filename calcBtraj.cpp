@@ -73,7 +73,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -90,21 +90,21 @@ int main (int argc, char *argv[])
   dispcr(startPosition);
   const unsigned int Npts = NperCycle*Ncircuits;
 
-  LAvector<p3vector<double> > Bpath_rzp(Npts,"Bpath_rzp");
+  Vector<p3vector<double> > Bpath_rzp(Npts,"Bpath_rzp");
   Bpath_rzp = p3vector<double>(0,0,0);
   Bpath_rzp.textformat(text_nobraces);
   Bpath_rzp.perline(1);
 
   calcPoincare(Bpath_rzp,startPosition,Ncircuits,NperCycle);
 
-//    LAvector<p3vector<double> > Bpath_xyz(Npts,"Bpath_xyz");
+//    Vector<p3vector<double> > Bpath_xyz(Npts,"Bpath_xyz");
 //    Bpath_xyz.textformat(text_nobraces);
 //    Bpath_xyz.perline(1);
 
-//    LAvector<p3vector<double> > B(Npts,"B");
+//    Vector<p3vector<double> > B(Npts,"B");
 //    B.textformat(text_nobraces);
 //    B.perline(1);
-//    LAvector<double> Bmag(Npts,"Bmag");
+//    Vector<double> Bmag(Npts,"Bmag");
 
 //    for (unsigned int i =0; i<Npts; i++) {
 //           const double r =   Bpath_rzp[i][0];

@@ -4,14 +4,14 @@
 #include <sstream>
 #include <string>
 
-#include "cooll.hpp"
+#include "matricks.hpp"
 #include "flsode.hpp"
 #include "calcPoincare.hpp"
 
 
 
 using namespace std;
-using namespace COOLL;
+using namespace Matricks;
 
 
 typedef struct {
@@ -50,7 +50,7 @@ extern "C" {void lsode_(void(*)(const FINT &,const double&,const double*,double*
 
 //positions and return valuer are given as (r,z,phi) (cylindrical coords)
 
-bool calcPoincare(LAvector<p3vector<double> >& position,
+bool calcPoincare(Vector<p3vector<double> >& position,
 		  const p3vector<double>& startPositionRZP,
 		  int& numTransits,
 		  const int pointsPerTransit)
@@ -202,7 +202,7 @@ bool calcPoincare(LAvector<p3vector<double> >& position,
 	 // % display counter
 	 dispcnt++;
 	 if (++dispcount == dispCheckPoint) {
-	    print(COOLL::round(double(dispcnt)/dispNpts*100));cout <<" %"<<endl;
+	    print(Matricks::round(double(dispcnt)/dispNpts*100));cout <<" %"<<endl;
 	    dispcount =0;
 	 }
 

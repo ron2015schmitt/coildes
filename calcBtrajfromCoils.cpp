@@ -99,7 +99,7 @@ int main (int argc, char *argv[])
 //  struct tms tbuff;
 //  clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -162,7 +162,7 @@ int main (int argc, char *argv[])
      if (Nc1 > 0) {
 
 
-	LAvector<p3vector<double> > Bpath_rzp(0,"Bpath_rzp");
+	Vector<p3vector<double> > Bpath_rzp(0,"Bpath_rzp");
 	Bpath_rzp = p3vector<double>(0,0,0);
 	Bpath_rzp.textformat(text_nobraces);
 	Bpath_rzp.perline(1);
@@ -228,7 +228,7 @@ int main (int argc, char *argv[])
   dispcr(startPosition);
   const unsigned int Npts = NperCycle*Ncircuits_planned;
 
-  LAvector<p3vector<double> > Bpath_rzp(Npts,"Bpath_rzp");
+  Vector<p3vector<double> > Bpath_rzp(Npts,"Bpath_rzp");
   Bpath_rzp = p3vector<double>(0,0,0);
   Bpath_rzp.textformat(text_nobraces);
   Bpath_rzp.perline(1);
@@ -239,17 +239,17 @@ int main (int argc, char *argv[])
   } 
   dispcr(Ncircuits_actual);
 
-//   LAvector<p3vector<double> > Bpath_xyz(Npts,"Bpath_xyz");
+//   Vector<p3vector<double> > Bpath_xyz(Npts,"Bpath_xyz");
 //   Bpath_xyz.textformat(text_nobraces);
 //   Bpath_xyz.perline(1);
 
-//    LAvector<p3vector<double> > B(Npts,"B");
+//    Vector<p3vector<double> > B(Npts,"B");
 //    B.textformat(text_nobraces);
 //    B.perline(1);
-//    LAvector<p3vector<double> > Brzp(Npts,"Brzp");
+//    Vector<p3vector<double> > Brzp(Npts,"Brzp");
 //    Brzp.textformat(text_nobraces);
 //    Brzp.perline(1);
-//    LAvector<double> Bmag(Npts,"Bmag");
+//    Vector<double> Bmag(Npts,"Bmag");
 //    Bmag.textformat(text_nobraces);
 //    Bmag.perline(1);
 
@@ -283,7 +283,7 @@ int main (int argc, char *argv[])
   const unsigned int Npts_actual = NperCycle*Ncircuits_actual;
   if (Ncircuits_actual != Ncircuits_planned) {
      dispcr(Npts_actual);
-     LAvector<p3vector<double> > Bpath_temp(Npts_actual,"Bpath_temp");
+     Vector<p3vector<double> > Bpath_temp(Npts_actual,"Bpath_temp");
      for(unsigned int i = 0; i < Npts_actual; i++) {
 	Bpath_temp[i] = Bpath_rzp[i];
      }

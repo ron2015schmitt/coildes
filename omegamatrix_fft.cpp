@@ -45,8 +45,8 @@ return a;
 // can *NOT*  use reduced set grad_fdel
 
 void omegamatrix_fft( Matrix<complex<double> > & omega,
-		      const LAvector<p3vector<double> > & B,
-		      const LAvector<double> & weight,
+		      const Vector<p3vector<double> > & B,
+		      const Vector<double> & weight,
 		      const Matrix<p3vector<complex<double> > > & grad_f,
 		      const unsigned int Nphi, const unsigned int Ntheta,
 		      const unsigned int Nnn, const unsigned int Nmm,
@@ -82,8 +82,8 @@ void omegamatrix_fft( Matrix<complex<double> > & omega,
 // can use reduced set grad_fdel
 
 void new_omegamatrix_fft( Matrix<complex<double> > & omega,
-			  const LAvector<p3vector<double> > & B,
-			  const LAvector<double> & weight,
+			  const Vector<p3vector<double> > & B,
+			  const Vector<double> & weight,
 			  const Matrix<p3vector<complex<double> > > & grad_fdel,
 			  const unsigned int Nphi, const unsigned int Ntheta,
 			  const unsigned int Nnn, const unsigned int Nmm,
@@ -113,11 +113,11 @@ void new_omegamatrix_fft( Matrix<complex<double> > & omega,
 
 // left out 1/(2*pi) factor here also
 void new_omega_from_lambda_fft( Matrix<complex<double> > & omega,
-				const LAvector<double> & dlambda_dtheta,
-				const LAvector<double> &  dlambda_dphi,
+				const Vector<double> & dlambda_dtheta,
+				const Vector<double> &  dlambda_dphi,
 				const Matrix<complex<double> > & fsR,
-				const LAvector<double> & nnR, 
-				const LAvector<double> & mmR,
+				const Vector<double> & nnR, 
+				const Vector<double> & mmR,
 				const unsigned int Nphi, const unsigned int Ntheta,
 				const unsigned int Nnn, const unsigned int Nmm,
 				const unsigned int Nfund, const unsigned int Mfund,
@@ -150,11 +150,11 @@ void new_omega_from_lambda_fft( Matrix<complex<double> > & omega,
 // left out 1/(2*pi) factor here also
 // this is new__omega_from_lambda_fft, but divided by [fluxshear*(1+dlambda_dtheta)]
 void modified_omega_from_lambda_fft( Matrix<complex<double> > & omega,
-				     const LAvector<double> & dlambda_dtheta,
-				     const LAvector<double> &  dlambda_dphi,
+				     const Vector<double> & dlambda_dtheta,
+				     const Vector<double> &  dlambda_dphi,
 				     const Matrix<complex<double> > & fsR,
-				     const LAvector<double> & nnR, 
-				     const LAvector<double> & mmR,
+				     const Vector<double> & nnR, 
+				     const Vector<double> & mmR,
 				     const unsigned int Nphi, const unsigned int Ntheta,
 				     const unsigned int Nnn, const unsigned int Nmm,
 				     const unsigned int Nfund, const unsigned int Mfund,
@@ -195,9 +195,9 @@ void modified_omega_from_lambda_fft( Matrix<complex<double> > & omega,
 // gives an omega matrix whose eigenvalues are i*(n+iota*m)
 // without factor of 1/(2*pi)
 void NormalizedOmegamatrix_fft( Matrix<complex<double> > & omegaN,
-				const LAvector<p3vector<double> > & B,
+				const Vector<p3vector<double> > & B,
 				const Matrix<p3vector<complex<double> > > & grad_f,
-				const LAvector<double>& Bp,
+				const Vector<double>& Bp,
 				const unsigned int Nphi, const unsigned int Ntheta,
 				const unsigned int Nnn, const unsigned int Nmm,
 				const unsigned int Nfund, const unsigned int Mfund)
@@ -227,10 +227,10 @@ void NormalizedOmegamatrix_fft( Matrix<complex<double> > & omegaN,
 
 
 void NormalizedOmegamatrix_fft_fast( Matrix<complex<double> > & omegaN,
-				     const LAvector<double> & Bt,
-				     const LAvector<double>& Bp,
+				     const Vector<double> & Bt,
+				     const Vector<double>& Bp,
 				     const Matrix<complex<double> > & fsR,
-				     const LAvector<double>& nnR,  const LAvector<double>& mmR,
+				     const Vector<double>& nnR,  const Vector<double>& mmR,
 				     const unsigned int Nphi, const unsigned int Ntheta,
 				     const unsigned int Nnn, const unsigned int Nmm,
 				     const unsigned int Nfund, const unsigned int Mfund)
@@ -264,11 +264,11 @@ void NormalizedOmegamatrix_fft_fast( Matrix<complex<double> > & omegaN,
 
 
 void OmegaN_PF_from_lambda_fft( Matrix<complex<double> > & PF,
-			    const  LAvector<double> & lambda,
-			    const LAvector<double> & nn, 
-			    const LAvector<double> & mm,
-			    const LAvector<double>& thetas, 
-			    const LAvector<double>& phis,
+			    const  Vector<double> & lambda,
+			    const Vector<double> & nn, 
+			    const Vector<double> & mm,
+			    const Vector<double>& thetas, 
+			    const Vector<double>& phis,
 			    const unsigned int Nphi, const unsigned int Ntheta,
 		            const unsigned int Nnn, const unsigned int Nmm,
 			    const unsigned int Nfund, const unsigned int Mfund)
@@ -283,7 +283,7 @@ void OmegaN_PF_from_lambda_fft( Matrix<complex<double> > & PF,
    Matrix<complex<double> >  FuncF(Npts,NF,"OmegaN_PF_from_lambda::FuncF");
   
    for (unsigned int k = 0; k<NF ; k++) {
-      LAvector<double> phase(Npts,"phase");
+      Vector<double> phase(Npts,"phase");
       phase= nn[k]*phis + mm[k]*(thetas+lambda);
       for (unsigned int i = 0; i<Npts ; i++) {
 	 FuncF(i,k) = std::complex<double>(cos(phase[i]),sin(phase[i])); 

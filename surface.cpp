@@ -31,9 +31,9 @@ using namespace std;
 #include "coils.hpp"
 #include "surface.hpp"
 
-#include "cooll.hpp"
+#include "matricks.hpp"
 
-void anglevectors(LAvector<double>& thetas, LAvector<double>& phis, 
+void anglevectors(Vector<double>& thetas, Vector<double>& phis, 
 		  const unsigned int Ntheta, const unsigned int  Nphi)
 {
    double dtheta = 2*M_PI/((double)Ntheta);
@@ -53,7 +53,7 @@ void anglevectors(LAvector<double>& thetas, LAvector<double>& phis,
 
 
 
-void modevectors(unsigned int& NF,  LAvector<double>& nn,  LAvector<double>& mm,
+void modevectors(unsigned int& NF,  Vector<double>& nn,  Vector<double>& mm,
 		 const unsigned int n_max, const unsigned int m_max,
 		 const bool mode00) 
 {
@@ -78,7 +78,7 @@ void modevectors(unsigned int& NF,  LAvector<double>& nn,  LAvector<double>& mm,
 } 
 
 
-void modevectors(unsigned int& NF,  LAvector<double>& nn,  LAvector<double>& mm,
+void modevectors(unsigned int& NF,  Vector<double>& nn,  Vector<double>& mm,
 		 unsigned int& n_max, unsigned int& m_max,
 		 const unsigned int N_harmonics, const unsigned int M_harmonics,
 		 const bool mode00) 
@@ -129,7 +129,7 @@ void modevectors(unsigned int& NF,  LAvector<double>& nn,  LAvector<double>& mm,
 
 
 
-void modevectorsR(unsigned int& NF,  LAvector<double>& nn,  LAvector<double>& mm,
+void modevectorsR(unsigned int& NF,  Vector<double>& nn,  Vector<double>& mm,
 		  const unsigned int n_max, const unsigned int m_max) 
 {
    NF = ((2*n_max+1)*(2*m_max+1))-1;
@@ -160,7 +160,7 @@ void make_mode_map(unsigned int& NF_A, const unsigned int& Nnn_A, const unsigned
 	      unsigned int& NF_B, const unsigned int& Nnn_B, const unsigned int& Nmm_B,
 	      const unsigned int Ndelta_B, const unsigned int Mdelta_B,
 	      const bool mode00_B,
-	      LAvector<unsigned int>& Fmap) 
+	      Vector<unsigned int>& Fmap) 
 {
 
    unsigned int NnnA = Nnn_A;
@@ -170,11 +170,11 @@ void make_mode_map(unsigned int& NF_A, const unsigned int& Nnn_A, const unsigned
    
 
 
-   LAvector<double> nn_A("nn_A");
-   LAvector<double> mm_A("mm_A");
+   Vector<double> nn_A("nn_A");
+   Vector<double> mm_A("mm_A");
    modevectors(NF_A,nn_A,mm_A,NnnA,NmmA,Ndelta_A,Mdelta_A,mode00_A);
-   LAvector<double> nn_B("nn_B");
-   LAvector<double> mm_B("mm_B");
+   Vector<double> nn_B("nn_B");
+   Vector<double> mm_B("mm_B");
    modevectors(NF_B,nn_B,mm_B,NnnB,NmmB,Ndelta_B,Mdelta_B,mode00_B);
 
    //   disp(NF_A);disp(NnnA);disp(NmmA); disp(Ndelta_A);dispcr(Mdelta_A);
@@ -216,8 +216,8 @@ void make_mode_map(unsigned int& NF_A, const unsigned int& Nnn_A, const unsigned
 
 // generate set of complex *orthonormal* Fourier functions
 
-void fseries(const LAvector<double>& nn,  const LAvector<double>& mm,
-	     const LAvector<double>& thetas, const LAvector<double>& phis,
+void fseries(const Vector<double>& nn,  const Vector<double>& mm,
+	     const Vector<double>& thetas, const Vector<double>& phis,
 	     Matrix<complex<double> >& f)
 {
 
@@ -229,7 +229,7 @@ void fseries(const LAvector<double>& nn,  const LAvector<double>& mm,
 
  
    for (unsigned int k = 0; k<NF ; k++) {
-      LAvector<double> phase(Npts,"phase");
+      Vector<double> phase(Npts,"phase");
       phase= nn[k]*phis + mm[k]*thetas;
       f.col(k) = vcomplex(cos(phase),sin(phase)); 
    }
@@ -240,7 +240,7 @@ void fseries(const LAvector<double>& nn,  const LAvector<double>& mm,
 }
 
 
-void remove_mode00(const LAvector<complex<double> >& vF, LAvector<complex<double> >& vFR) {
+void remove_mode00(const Vector<complex<double> >& vF, Vector<complex<double> >& vFR) {
 
    const unsigned int NF = vF.size();
    vFR.resize(NF-1);
@@ -275,15 +275,15 @@ double calcAspectRatio(const FourierSurface& fsurface)
 {
 
 
-   const LAvector<double>& nn = fsurface.nn();
-   const LAvector<double>& mm = fsurface.mm();
-   const LAvector<double>& RF = fsurface.RF();
-   const LAvector<double>& ZF = fsurface.ZF();
+   const Vector<double>& nn = fsurface.nn();
+   const Vector<double>& mm = fsurface.mm();
+   const Vector<double>& RF = fsurface.RF();
+   const Vector<double>& ZF = fsurface.ZF();
    const unsigned int Nmodes = mm.size();
 
-   LAvector<bool> mask(Nmodes,"mask");
+   Vector<bool> mask(Nmodes,"mask");
    mask = (nn==0.0) && (mm==0.0);
-   LAvector<double> result(Nmodes,"result");
+   Vector<double> result(Nmodes,"result");
    result=RF[mask];
 
    const double Ro = result[0];
@@ -317,26 +317,26 @@ double calcAspectRatio(const FourierSurface& fsurface)
 
 
 void expandsurfaceandbases (
- LAvector<p3vector<double> >&X, LAvector<p3vector<double> >&dA_dthetadphi,
- LAvector<p3vector<double> >& dx_dr, LAvector<p3vector<double> >& dx_dtheta, LAvector<p3vector<double> >& dx_dphi, 
- LAvector<p3vector<double> >& grad_r, LAvector<p3vector<double> >& grad_theta, LAvector<p3vector<double> >& grad_phi, 
+ Vector<p3vector<double> >&X, Vector<p3vector<double> >&dA_dthetadphi,
+ Vector<p3vector<double> >& dx_dr, Vector<p3vector<double> >& dx_dtheta, Vector<p3vector<double> >& dx_dphi, 
+ Vector<p3vector<double> >& grad_r, Vector<p3vector<double> >& grad_theta, Vector<p3vector<double> >& grad_phi, 
  const FourierSurface& fsurface,
- const LAvector<double>& thetas, const LAvector<double>& phis 
+ const Vector<double>& thetas, const Vector<double>& phis 
  )
 {
 
   
-   const LAvector<double>& nn = fsurface.nn();
-   const LAvector<double>& mm = fsurface.mm();
-   const LAvector<double>& RF = fsurface.RF();
-   const LAvector<double>& ZF = fsurface.ZF();
+   const Vector<double>& nn = fsurface.nn();
+   const Vector<double>& mm = fsurface.mm();
+   const Vector<double>& RF = fsurface.RF();
+   const Vector<double>& ZF = fsurface.ZF();
    const unsigned int Nmodes = mm.size();
    const unsigned int Npts = phis.size();
 //   const double dphi_by_dtheta = 2.0*PI* 2.0*PI/double(Npts);
 
-   LAvector<double> angle(Nmodes,"angle");
-   LAvector<double> sinkern(Nmodes,"sinkern");
-   LAvector<double> coskern(Nmodes,"coskern"); 
+   Vector<double> angle(Nmodes,"angle");
+   Vector<double> sinkern(Nmodes,"sinkern");
+   Vector<double> coskern(Nmodes,"coskern"); 
 
  
 
@@ -396,12 +396,12 @@ void expandsurfaceandbases (
 //**********************************************
 
 void perturbsurface(
-		    LAvector<p3vector<double> >&X, LAvector<p3vector<double> >&dA_dthetadphi,
-		    LAvector<p3vector<double> >& dx_dr, LAvector<p3vector<double> >& dx_dtheta, LAvector<p3vector<double> >& dx_dphi, 
-		    LAvector<p3vector<double> >& grad_r, LAvector<p3vector<double> >& grad_theta, LAvector<p3vector<double> >& grad_phi, 
+		    Vector<p3vector<double> >&X, Vector<p3vector<double> >&dA_dthetadphi,
+		    Vector<p3vector<double> >& dx_dr, Vector<p3vector<double> >& dx_dtheta, Vector<p3vector<double> >& dx_dphi, 
+		    Vector<p3vector<double> >& grad_r, Vector<p3vector<double> >& grad_theta, Vector<p3vector<double> >& grad_phi, 
 		    const unsigned int n, const unsigned int m,
 		    const double delRF, const double delZF,
-		    const LAvector<double>& thetas, const LAvector<double>& phis 
+		    const Vector<double>& thetas, const Vector<double>& phis 
 		    )
 {
   
@@ -457,18 +457,18 @@ void perturbsurface(
 
 
 void expandsurface(
-		   LAvector<p3vector<double> >&X, LAvector<p3vector<double> >&dA_dthetadphi,
+		   Vector<p3vector<double> >&X, Vector<p3vector<double> >&dA_dthetadphi,
 		   const FourierSurface& fsurface,
-		   const LAvector<double>& thetas, const LAvector<double>& phis 
+		   const Vector<double>& thetas, const Vector<double>& phis 
 		   ) {
    const unsigned int Npts = phis.size();
 
-   LAvector<p3vector<double> > dx_dr(Npts, "plasmasurface::dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"plasmasurface::dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"plasmasurface::dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"plasmasurface::grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"plasmasurface::grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"plasmasurface::grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "plasmasurface::dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"plasmasurface::dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"plasmasurface::dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"plasmasurface::grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"plasmasurface::grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"plasmasurface::grad_phi");
 
    expandsurfaceandbases(X,dA_dthetadphi,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,fsurface,thetas,phis);
 }
@@ -479,10 +479,10 @@ void expandsurface(
 
 
 void transformsurface(
-		      const LAvector<p3vector<double> >&X,
+		      const Vector<p3vector<double> >&X,
 		      FourierSurface& fsurface,
 		      const Matrix<complex<double> >& fs,
-		      const LAvector<double>& nn, const LAvector<double>& mm
+		      const Vector<double>& nn, const Vector<double>& mm
 		      ) {
 
    const unsigned int Npts = X.size();
@@ -490,8 +490,8 @@ void transformsurface(
 
    // find R and Z
   
-   LAvector<double> R(Npts, "transformsurface::R");
-   LAvector<double> Z(Npts, "transformsurface::Z");
+   Vector<double> R(Npts, "transformsurface::R");
+   Vector<double> Z(Npts, "transformsurface::Z");
 
    for (unsigned int i = 0; i<Npts;i++) {
       R[i] = sqrt( sqr(X[i].x()) + sqr(X[i].y()) );
@@ -499,16 +499,16 @@ void transformsurface(
    }
 
 
-   LAvector<complex<double> > RF(NF,"transformsurface::RF");
+   Vector<complex<double> > RF(NF,"transformsurface::RF");
    transformfunction(R,RF,fs);
 
-   LAvector<complex<double> > ZF(NF,"transformsurface::ZF");
+   Vector<complex<double> > ZF(NF,"transformsurface::ZF");
    transformfunction(Z,ZF,fs);
 
-   LAvector<double> nRZ("nRZ");
-   LAvector<double> mRZ("mRZ");
-   LAvector<double> RZCOS("RZCOS");
-   LAvector<double> RZSIN("RZSIN");
+   Vector<double> nRZ("nRZ");
+   Vector<double> mRZ("mRZ");
+   Vector<double> RZCOS("RZCOS");
+   Vector<double> RZSIN("RZSIN");
 
    vector<double> nnTEMP;
    vector<double> mmTEMP;
@@ -540,9 +540,9 @@ void transformsurface(
    RZCOS.resize() = vcast<double>(cosTEMP);
    RZSIN.resize() = vcast<double>(sinTEMP);
 
-   LAvector<complex<double> > RZF(NF,"RZF");
-   LAvector<double> nntemp = nn;
-   LAvector<double> mmtemp = mm;
+   Vector<complex<double> > RZF(NF,"RZF");
+   Vector<double> nntemp = nn;
+   Vector<double> mmtemp = mm;
    convert_sincos2exp(nRZ,mRZ,RZCOS,RZSIN,nntemp,mmtemp,RZF,false);
    convert_exp2sincos(nRZ,mRZ,RZCOS,RZSIN,nn,mm,RZF);
 
@@ -560,8 +560,8 @@ void transformsurface(
 
 
 void expandfunction(
-		    LAvector<complex<double> >&func,
-		    const LAvector<complex<double> > &funcF,
+		    Vector<complex<double> >&func,
+		    const Vector<complex<double> > &funcF,
 		    const Matrix<complex<double> >& f_ortho
 		    ) { 
   
@@ -582,12 +582,12 @@ void expandfunction(
 
 
 void expandfunction(
-		    LAvector<double>&funcREAL,
-		    const LAvector<complex<double> > &funcF,
+		    Vector<double>&funcREAL,
+		    const Vector<complex<double> > &funcF,
 		    const Matrix<complex<double> >& f_ortho
 		    ) { 
    const unsigned int Npts = funcREAL.size();
-   LAvector<complex<double> > funcCMPLX(Npts,"expandsurface::funcCMPLX");
+   Vector<complex<double> > funcCMPLX(Npts,"expandsurface::funcCMPLX");
    expandfunction(funcCMPLX,funcF,f_ortho);
    funcREAL = real(funcCMPLX);
 }
@@ -595,8 +595,8 @@ void expandfunction(
 
 // generate coef's for orthonormal expansion of given function
 void transformfunction(
-		       const LAvector<double>&func,
-		       LAvector<complex<double> > &funcF,
+		       const Vector<double>&func,
+		       Vector<complex<double> > &funcF,
 		       const Matrix<complex<double> >& f_ortho
 		       ) {
   
@@ -626,8 +626,8 @@ void transformfunction(
 
 // insert coef's for all conjugate modes (as needed)
 
-void completetheseries(const LAvector<double>& nn, const LAvector<double>& mm,
-		       LAvector<complex<double> >& xF)
+void completetheseries(const Vector<double>& nn, const Vector<double>& mm,
+		       Vector<complex<double> >& xF)
 {
    //   int nmax = int(max(abs(nn)));
    //   int mmax = int(max(abs(mm)));
@@ -638,7 +638,7 @@ void completetheseries(const LAvector<double>& nn, const LAvector<double>& mm,
    //       unsigned int knegate = (-n+nmax)*mt + (-m+mmax);
 
    unsigned int NF=nn.size();
-   LAvector<unsigned int> knegate(NF,"knegate");
+   Vector<unsigned int> knegate(NF,"knegate");
    for( unsigned int k = 0; k<NF; k++){
       for( unsigned int j = 0; j<NF; j++){
 	 if ( (mm[j] == - mm[k]) && (nn[j] == - nn[k]) ) {
@@ -669,8 +669,8 @@ void completetheseries(const LAvector<double>& nn, const LAvector<double>& mm,
 // If mode == CondenseMode_zeros_only, this function removes all zero coef's
 // If mode == CondenseMode_zeros_conjugs, this function removes all zero coefs and conjugate coef's
 
-void condensetheseries(const LAvector<double>& nn, const LAvector<double>& mm, 
-		       const LAvector<complex<double> >& xF, 
+void condensetheseries(const Vector<double>& nn, const Vector<double>& mm, 
+		       const Vector<complex<double> >& xF, 
 		       Matrix<double>& Aout,
 		       const CondenseMode mode, const double cutoff) {
   
@@ -680,7 +680,7 @@ void condensetheseries(const LAvector<double>& nn, const LAvector<double>& mm,
    std::vector<double> mnew;
    std::vector<std::complex<double> > xnew;
 
-   LAvector<unsigned int> knegate(NF,"knegate");
+   Vector<unsigned int> knegate(NF,"knegate");
    for( unsigned int k = 0; k<NF; k++){
       for( unsigned int j = 0; j<NF; j++){
 	 if ( (mm[j] == - mm[k]) && (nn[j] == - nn[k]) ) {
@@ -741,10 +741,10 @@ void condensetheseries(const LAvector<double>& nn, const LAvector<double>& mm,
 // to complex orthonormal exponential series
 //      g(theta,phi) = sum{ Gmn * (1/2pi)*exp(i*m*theta + i*n*phi) }n=0,+/-1,+/-2...; m=0,+/-1,+/-2,...
 
-int convert_sincos2exp(const LAvector<double>& ncosin, const LAvector<double>& mcosin,
-		       const LAvector<double>& xCOS, const LAvector<double>& xSIN,
-		       LAvector<double>& nn, LAvector<double>& mm,
-		       LAvector<complex<double> >& xF, const bool giveAllWarnings)
+int convert_sincos2exp(const Vector<double>& ncosin, const Vector<double>& mcosin,
+		       const Vector<double>& xCOS, const Vector<double>& xSIN,
+		       Vector<double>& nn, Vector<double>& mm,
+		       Vector<complex<double> >& xF, const bool giveAllWarnings)
 {
 
    const unsigned int Nmodes = ncosin.size();
@@ -756,13 +756,13 @@ int convert_sincos2exp(const LAvector<double>& ncosin, const LAvector<double>& m
    if ( nn.size()==0) {
       // create mode vectors if not given
       std::cerr <<"BUG ENCOUNTERED at line "<<__LINE__<<" in file "<<__FILE__<<std::endl;
-      nmax = COOLL::round2int(max(abs(ncosin)));
-      mmax = COOLL::round2int(max(abs(mcosin)));
+      nmax = Matricks::round2int(max(abs(ncosin)));
+      mmax = Matricks::round2int(max(abs(mcosin)));
       modevectors(NF,nn,mm,nmax,mmax);
    } else {
       // otherwise work with what we're given
-      nmax = COOLL::round2int(max(abs(nn)));
-      mmax = COOLL::round2int(max(abs(mm)));
+      nmax = Matricks::round2int(max(abs(nn)));
+      mmax = Matricks::round2int(max(abs(mm)));
       NF = nn.size();
    }
 
@@ -771,16 +771,16 @@ int convert_sincos2exp(const LAvector<double>& ncosin, const LAvector<double>& m
    xF = 0;
 
    for(unsigned int j = 0; j<Nmodes; j++) {
-      int n=COOLL::round2int(ncosin[j]);
-      int m=COOLL::round2int(mcosin[j]);
+      int n=Matricks::round2int(ncosin[j]);
+      int m=Matricks::round2int(mcosin[j]);
       double Acos = xCOS[j];
       double Asin = xSIN[j];
 
       bool found = false;
 
       for(unsigned int k = 0; k<NF; k++) {
-	 int nn_k = COOLL::round2int(nn[k]); 
-	 int mm_k = COOLL::round2int(mm[k]); 
+	 int nn_k = Matricks::round2int(nn[k]); 
+	 int mm_k = Matricks::round2int(mm[k]); 
 	 if ( (nn_k==n) && (mm_k==m) ){
 	    if ( (n==0) && (m==0) ) {
 	       xF[k] += complex<double>(Acos,Asin);
@@ -824,10 +824,10 @@ int convert_sincos2exp(const LAvector<double>& ncosin, const LAvector<double>& m
 
 
 
-int convert_exp2sincos(LAvector<double>& ncosin, LAvector<double>& mcosin,
-		       LAvector<double>& xCOS,  LAvector<double>& xSIN,
-		       const LAvector<double>& nn, const LAvector<double>& mm,
-		       const LAvector<complex<double> >& xF)
+int convert_exp2sincos(Vector<double>& ncosin, Vector<double>& mcosin,
+		       Vector<double>& xCOS,  Vector<double>& xSIN,
+		       const Vector<double>& nn, const Vector<double>& mm,
+		       const Vector<complex<double> >& xF)
 {
 
    Matrix<double> Atemp("Atemp");

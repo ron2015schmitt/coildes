@@ -65,15 +65,15 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
   // coefficient C is the integration coef for the fourier transform
@@ -85,8 +85,8 @@ int main (int argc, char *argv[])
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   modevectors(NF,nn,mm,Nnn,Nmm);
 
@@ -108,29 +108,29 @@ int main (int argc, char *argv[])
   
 
  // load the plasma flux fourier coef's
-  LAvector<complex<double> > FluxF(NF,"FluxF");
+  Vector<complex<double> > FluxF(NF,"FluxF");
   cout <<endl<< "$ Loading original Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
   if (load_coefs(flux_filename,CoefFileFormat_sincos,nn,mm,FluxF))
     return 3;
-  LAvector<double> Flux(Npts, "Flux");
+  Vector<double> Flux(Npts, "Flux");
   expandfunction(Flux,FluxF,fs);
  
 
  
-  LAvector<complex<double> > Flux2F(NF,"Flux2F");
+  Vector<complex<double> > Flux2F(NF,"Flux2F");
   cout <<endl<< "$ Loading perturbed Plasma Flux sin/cos fourier coefficients from " << pert_flux_filename << endl;
   if (load_coefs(pert_flux_filename,CoefFileFormat_sincos,nn,mm,Flux2F))
     return 3;
-  LAvector<double> Flux2(Npts, "Flux2");
+  Vector<double> Flux2(Npts, "Flux2");
   expandfunction(Flux2,Flux2F,fs);
 
 
 
 
-  LAvector<double> delFlux(Npts, "delFlux");
+  Vector<double> delFlux(Npts, "delFlux");
   for (unsigned int i =0; i<Npts; i++)
     delFlux[i] = (Flux2[i]-Flux[i]);
-  LAvector<complex<double> > delFluxF(NF,"delFluxF");
+  Vector<complex<double> > delFluxF(NF,"delFluxF");
   transformfunction(delFlux,delFluxF,fs);
 
   STOPTIME(tbuff,ckstart);

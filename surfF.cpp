@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -71,13 +71,13 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -92,7 +92,7 @@ int main (int argc, char *argv[])
   cout << endl;
   cout <<"$ Loading surface data onto "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
 
-  LAvector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > X(Npts, "X");
 
 
 

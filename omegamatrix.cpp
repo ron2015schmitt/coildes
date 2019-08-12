@@ -37,11 +37,11 @@ using namespace std;
 
 
 void omegamatrix( Matrix<complex<double> > & omega,
-		  const LAvector<p3vector<double> > & B,
+		  const Vector<p3vector<double> > & B,
 		  const Matrix<p3vector<complex<double> > > & grad_f,
 		  const Matrix<complex<double> > & f_del,
-		  const LAvector<p3vector<double> > dx_dtheta,
-		  const LAvector<p3vector<double> > dx_dphi){ 
+		  const Vector<p3vector<double> > dx_dtheta,
+		  const Vector<p3vector<double> > dx_dphi){ 
   
    const unsigned int Npts = B.size();
    const unsigned int NF = grad_f.Ncols();
@@ -52,7 +52,7 @@ void omegamatrix( Matrix<complex<double> > & omega,
   
    Matrix<complex<double> >  Bdotgradf(Npts,NF,"omegamatrix::Bdotgradf");
   
-   LAvector<double> da(Npts,"omegamatrix::da");
+   Vector<double> da(Npts,"omegamatrix::da");
    for (unsigned int i = 0; i<Npts ; i++) 
       da[i] = norm(cross(dx_dtheta[i],dx_dphi[i]))*dphi_dtheta;
 
@@ -75,13 +75,13 @@ void omegamatrix( Matrix<complex<double> > & omega,
 // different implementation, but gives same result.
 
 void omegamatrixB( Matrix<complex<double> > & omega,
-		   const LAvector<p3vector<double> > & B,
+		   const Vector<p3vector<double> > & B,
 		   const Matrix<p3vector<complex<double> > > & grad_f,
 		   const Matrix<complex<double> > & f_del,
-		   const LAvector<p3vector<double> > dx_dr,
-		   const LAvector<p3vector<double> > dx_dtheta,
-		   const LAvector<p3vector<double> > dx_dphi,
-		   const LAvector<p3vector<double> > grad_r)
+		   const Vector<p3vector<double> > dx_dr,
+		   const Vector<p3vector<double> > dx_dtheta,
+		   const Vector<p3vector<double> > dx_dphi,
+		   const Vector<p3vector<double> > grad_r)
 { 
 
    const unsigned int Npts = B.size();
@@ -90,7 +90,7 @@ void omegamatrixB( Matrix<complex<double> > & omega,
    const double dphi_dtheta= (2*PI)*(2*PI)/Npts;
    omega.resize(NF,No);
   
-   LAvector<double> J(Npts,"J");
+   Vector<double> J(Npts,"J");
    for (unsigned int i =0; i<Npts; i++)
       J[i] = dot(dx_dr[i], cross(dx_dtheta[i],dx_dphi[i]));
 
@@ -109,8 +109,8 @@ void omegamatrixB( Matrix<complex<double> > & omega,
 
 
 void new_omegamatrix( Matrix<complex<double> > & omega,
-		      const LAvector<p3vector<double> > & B,
-		      const LAvector<double> & weight,
+		      const Vector<p3vector<double> > & B,
+		      const Vector<double> & weight,
 		      const Matrix<p3vector<complex<double> > > & grad_fdel,
 		      const Matrix<complex<double> > & f)
 { 
@@ -124,7 +124,7 @@ void new_omegamatrix( Matrix<complex<double> > & omega,
   
    Matrix<complex<double> >  Bdotgradf(Npts,No,"new_omegamatrix::Bdotgradf");
 
-   LAvector<double> weight2(Npts,"new_omegamatrix::weight2");
+   Vector<double> weight2(Npts,"new_omegamatrix::weight2");
   
    for (unsigned int i = 0; i<Npts ; i++) 
       weight2[i] = weight[i] * dphi_dtheta;
@@ -143,11 +143,11 @@ void new_omegamatrix( Matrix<complex<double> > & omega,
 
 
 void other_omegamatrix( Matrix<complex<double> > & omega,
-			const LAvector<p3vector<double> > & B,
+			const Vector<p3vector<double> > & B,
 			const Matrix<p3vector<complex<double> > > & grad_fdel,
 			const Matrix<complex<double> > & f,
-			const LAvector<p3vector<double> > dx_dtheta,
-			const LAvector<p3vector<double> > dx_dphi)
+			const Vector<p3vector<double> > dx_dtheta,
+			const Vector<p3vector<double> > dx_dphi)
 { 
   
    const unsigned int Npts = B.size();
@@ -159,7 +159,7 @@ void other_omegamatrix( Matrix<complex<double> > & omega,
   
    Matrix<complex<double> >  Bdotgradf(Npts,NF,"omegamatrix::Bdotgradf");
   
-   LAvector<double> da(Npts,"omegamatrix::da");
+   Vector<double> da(Npts,"omegamatrix::da");
    for (unsigned int i = 0; i<Npts ; i++) 
       da[i] = norm(cross(dx_dtheta[i],dx_dphi[i]))*dphi_dtheta;
 
@@ -187,10 +187,10 @@ void other_omegamatrix( Matrix<complex<double> > & omega,
 
 //  Normalized Omega
 void NormalizedOmegamatrix( Matrix<complex<double> > & omegaN,
-			    const LAvector<p3vector<double> > & B,
+			    const Vector<p3vector<double> > & B,
 			    const Matrix<complex<double> > & fs,
 			    const Matrix<p3vector<complex<double> > > & grad_f,
-			    const LAvector<double> Bphi)
+			    const Vector<double> Bphi)
 { 
   
    const unsigned int Npts = B.size();
@@ -220,13 +220,13 @@ void NormalizedOmegamatrix( Matrix<complex<double> > & omegaN,
 
 
 //  Normalized Omega
-// using one loop.  this is actually slower.  COOLL matrix multiply is optimized,whereas
+// using one loop.  this is actually slower.  Matricks matrix multiply is optimized,whereas
 // this is not.
 void NormalizedOmegamatrixB( Matrix<complex<double> > & omegaN,
-			     const LAvector<p3vector<double> > & B,
+			     const Vector<p3vector<double> > & B,
 			     const Matrix<complex<double> > & fs,
 			     const Matrix<p3vector<complex<double> > > & grad_f,
-			     const LAvector<p3vector<double> > grad_phi)
+			     const Vector<p3vector<double> > grad_phi)
 { 
   
    const unsigned int Npts = B.size();
@@ -252,12 +252,12 @@ void NormalizedOmegamatrixB( Matrix<complex<double> > & omegaN,
 
 
 void OmegaN_PF_from_lambda( Matrix<complex<double> > & PF,
-			    const  LAvector<double> & lambda,
+			    const  Vector<double> & lambda,
 			    const Matrix<complex<double> > & fs,
-			    const LAvector<double> & nn, 
-			    const LAvector<double> & mm,
-			    const LAvector<double>& thetas, 
-			    const LAvector<double>& phis
+			    const Vector<double> & nn, 
+			    const Vector<double> & mm,
+			    const Vector<double>& thetas, 
+			    const Vector<double>& phis
 			    )
 { 
   
@@ -271,7 +271,7 @@ void OmegaN_PF_from_lambda( Matrix<complex<double> > & PF,
    Matrix<complex<double> >  FuncF(Npts,NF,"OmegaN_PF_from_lambda::FuncF");
   
    for (unsigned int k = 0; k<NF ; k++) {
-      LAvector<double> phase(Npts,"phase");
+      Vector<double> phase(Npts,"phase");
       phase= nn[k]*phis + mm[k]*(thetas+lambda);
       for (unsigned int i = 0; i<Npts ; i++) {
 	 FuncF(i,k) = std::complex<double>(coef*cos(phase[i]),coef*sin(phase[i])); 
@@ -285,13 +285,13 @@ void OmegaN_PF_from_lambda( Matrix<complex<double> > & PF,
 
 
 void OmegaN_PFinv_from_lambda( Matrix<complex<double> > & PFinv,
-			       const  LAvector<double> & lambda,
-			       const  LAvector<double> & dlambda_dtheta,
+			       const  Vector<double> & lambda,
+			       const  Vector<double> & dlambda_dtheta,
 			       const Matrix<complex<double> > & fs,
-			       const LAvector<double> & nn, 
-			       const LAvector<double> & mm,
-			       const LAvector<double>& thetas, 
-			       const LAvector<double>& phis
+			       const Vector<double> & nn, 
+			       const Vector<double> & mm,
+			       const Vector<double>& thetas, 
+			       const Vector<double>& phis
 			       )
 { 
   
@@ -305,7 +305,7 @@ void OmegaN_PFinv_from_lambda( Matrix<complex<double> > & PFinv,
    Matrix<complex<double> >  FuncF(NF,Npts,"OmegaN_PFinv_from_lambda::FuncF");
   
    for (unsigned int k = 0; k<NF ; k++) {
-      LAvector<double> phase(Npts,"phase");
+      Vector<double> phase(Npts,"phase");
       phase= -nn[k]*phis - mm[k]*(thetas+lambda);
       for (unsigned int i = 0; i<Npts ; i++) {
 	 FuncF(k,i) = std::complex<double>(coef*cos(phase[i]),coef*sin(phase[i]))*(1+dlambda_dtheta[i]); 
@@ -323,10 +323,10 @@ void OmegaN_PFinv_from_lambda( Matrix<complex<double> > & PFinv,
 
 
 void divfree_omegamatrix( Matrix<complex<double> > & omega,
-			  const LAvector<complex<double> > & JBtF,
-			  const LAvector<complex<double> > & JBpF,
-			  const LAvector<double> & nn,
-			  const LAvector<double> & mm)
+			  const Vector<complex<double> > & JBtF,
+			  const Vector<complex<double> > & JBpF,
+			  const Vector<double> & nn,
+			  const Vector<double> & mm)
 { 
   
    const unsigned int NF = nn.size();
@@ -334,7 +334,7 @@ void divfree_omegamatrix( Matrix<complex<double> > & omega,
    omega.resize(NFR,NFR);
    const std::complex<double> i =  std::complex<double>(0,1);
   
-   const LAvector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
+   const Vector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
    const unsigned int ind00 = tmp[0];
   
   
@@ -342,7 +342,7 @@ void divfree_omegamatrix( Matrix<complex<double> > & omega,
       for (unsigned int kk = 0; kk<NF ; kk++) {
 	 const double deln = nn[kk] - nn[ll];
 	 const double delm = mm[kk] - mm[ll];
-	 const LAvector<unsigned int> inds = findtrue((nn==deln)&&(mm==delm));
+	 const Vector<unsigned int> inds = findtrue((nn==deln)&&(mm==delm));
 	 const unsigned int ind = inds[0];
 
 	 const unsigned int r = (kk<=ind00) ? kk : (kk-1);
@@ -373,9 +373,9 @@ void divfree_omegamatrix( Matrix<complex<double> > & omega,
 
 
 void lambda_omegamatrix( Matrix<complex<double> > & omega,
-			 const LAvector<complex<double> > & lambdaF,
-			 const LAvector<double> & nn,
-			 const LAvector<double> & mm)
+			 const Vector<complex<double> > & lambdaF,
+			 const Vector<double> & nn,
+			 const Vector<double> & mm)
 { 
   
    const unsigned int NF = nn.size();
@@ -385,7 +385,7 @@ void lambda_omegamatrix( Matrix<complex<double> > & omega,
 
    const std::complex<double> i =  std::complex<double>(0,1);
   
-   const LAvector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
+   const Vector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
    const unsigned int ind00 = tmp[0];
 
 
@@ -397,7 +397,7 @@ void lambda_omegamatrix( Matrix<complex<double> > & omega,
       for (unsigned int r = 0; r<NF ; r++) {
 	 const double deln = nn[r] - nn[c];
 	 const double delm = mm[r] - mm[c];
-	 const LAvector<unsigned int> inds = findtrue((nn==deln)&&(mm==delm));
+	 const Vector<unsigned int> inds = findtrue((nn==deln)&&(mm==delm));
 	 const unsigned int ind = inds[0];
 
 	 if ((r==ind00)||(c==ind00)) {
@@ -435,9 +435,9 @@ void lambda_omegamatrix( Matrix<complex<double> > & omega,
 
 
 void lambda_omegamatrix( Matrix<complex<double> > & omega,
-			 const LAvector<complex<double> > & lambdaF,
-			 const LAvector<double> & nnR,
-			 const LAvector<double> & mmR,
+			 const Vector<complex<double> > & lambdaF,
+			 const Vector<double> & nnR,
+			 const Vector<double> & mmR,
 			 const double fluxshear,
 			 const double iota)
 { 

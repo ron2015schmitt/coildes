@@ -46,7 +46,7 @@ using namespace std;
 int main (int argc, char *argv[])
 {
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
    Matrix <double> dataM("dataM");
    dataM.perline(1);
    dataM.textformat(text_nobraces);
-   LAvector <double> dataV("dataV");
+   Vector <double> dataV("dataV");
    dataV.perline(1);
    dataV.textformat(text_nobraces);
 
@@ -113,14 +113,14 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -131,8 +131,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -189,14 +189,14 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X0(Npts, "X0");
-   LAvector<p3vector<double> > dA_dtdp0(Npts, "dAdtdp0");
-   LAvector<p3vector<double> > dx_dr0(Npts, "dx_dr0");
-   LAvector<p3vector<double> > dx_dtheta0(Npts,"dx_dtheta0");
-   LAvector<p3vector<double> > dx_dphi0(Npts,"dx_dphi0");
-   LAvector<p3vector<double> > grad_r0(Npts,"grad_r0");
-   LAvector<p3vector<double> > grad_theta0(Npts,"grad_theta0");
-   LAvector<p3vector<double> > grad_phi0(Npts,"grad_phi0");
+   Vector<p3vector<double> > X0(Npts, "X0");
+   Vector<p3vector<double> > dA_dtdp0(Npts, "dAdtdp0");
+   Vector<p3vector<double> > dx_dr0(Npts, "dx_dr0");
+   Vector<p3vector<double> > dx_dtheta0(Npts,"dx_dtheta0");
+   Vector<p3vector<double> > dx_dphi0(Npts,"dx_dphi0");
+   Vector<p3vector<double> > grad_r0(Npts,"grad_r0");
+   Vector<p3vector<double> > grad_theta0(Npts,"grad_theta0");
+   Vector<p3vector<double> > grad_phi0(Npts,"grad_phi0");
  
 
 
@@ -272,13 +272,13 @@ int main (int argc, char *argv[])
  
    STARTTIME(tbuff,ckstart);
      
-   LAvector<p3vector<double> > Bcoils0(Npts, "Bcoils0");
-   LAvector<p3vector<double> > Btotal0(Npts, "Btotal0");
+   Vector<p3vector<double> > Bcoils0(Npts, "Bcoils0");
+   Vector<p3vector<double> > Btotal0(Npts, "Btotal0");
    unsigned int count0 = 0;
    unsigned int checkup0 = static_cast<unsigned int>(Npts*0.01);
    for (unsigned int j =0; j<Npts; j++) {
       if (++count0 == checkup0) {
-	 print(COOLL::round(double(j)/Npts*100));cout <<" %"<<endl;
+	 print(Matricks::round(double(j)/Npts*100));cout <<" %"<<endl;
 	 count0 =0;
       }
       bTotalandbCoils(X0[j],Btotal0[j], Bcoils0[j]);
@@ -287,16 +287,16 @@ int main (int argc, char *argv[])
    STOPTIME(tbuff,ckstart);
 
 
-   LAvector<p3vector<double> > v_normal0(Npts, "v_normal0");
+   Vector<p3vector<double> > v_normal0(Npts, "v_normal0");
    for (unsigned int j =0; j<Npts; j++)
       v_normal0[j] = dA_dtdp0[j]/norm(dA_dtdp0[j]);
 
-   LAvector<double> Flux0(Npts, "Flux0");
+   Vector<double> Flux0(Npts, "Flux0");
  
    for (unsigned int j =0; j<Npts; j++) {
       Flux0[j] = dot(Btotal0[j], dA_dtdp0[j]);
    }
-   LAvector<complex<double> > FluxF0(NFR,"FluxF0");
+   Vector<complex<double> > FluxF0(NFR,"FluxF0");
    transformfunction(Flux0,FluxF0,fsR);
 
 
@@ -338,13 +338,13 @@ int main (int argc, char *argv[])
 
 
    Matrix<complex<double> > OG(NFR,(2*NF),"OG");
-   LAvector<double> dFlux_RMS(2*NF, "dFlux_RMS");
-   LAvector<double> dFluxF_RMS(2*NF, "dFluxF_RMS");
+   Vector<double> dFlux_RMS(2*NF, "dFlux_RMS");
+   Vector<double> dFluxF_RMS(2*NF, "dFluxF_RMS");
 
 
-   LAvector<double> kvec(2*NF, "kvec");
-   LAvector<double> mvec(2*NF, "mvec");
-   LAvector<double> nvec(2*NF, "nvec");
+   Vector<double> kvec(2*NF, "kvec");
+   Vector<double> mvec(2*NF, "mvec");
+   Vector<double> nvec(2*NF, "nvec");
 
    cout << endl;
    cout<<"$ Now perturb each fourier mode..."<<endl;
@@ -367,14 +367,14 @@ int main (int argc, char *argv[])
 	 nvec[mode_index] = npert;
 	 mvec[mode_index] = mpert;
 
-	 LAvector<p3vector<double> > X(Npts, "X");
-	 LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
-	 LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-	 LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-	 LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-	 LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-	 LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-	 LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+	 Vector<p3vector<double> > X(Npts, "X");
+	 Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+	 Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+	 Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+	 Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+	 Vector<p3vector<double> > grad_r(Npts,"grad_r");
+	 Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+	 Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
 	 const unsigned int NFS = plasmafourier0.mm().size();
 	 FourierSurface plasmafourier;
@@ -445,13 +445,13 @@ int main (int argc, char *argv[])
  
 	 STARTTIME(tbuff,ckstart);
      
-	 LAvector<p3vector<double> > Bcoils(Npts, "Bcoils");
-	 LAvector<p3vector<double> > Btotal(Npts, "Btotal");
+	 Vector<p3vector<double> > Bcoils(Npts, "Bcoils");
+	 Vector<p3vector<double> > Btotal(Npts, "Btotal");
 	 unsigned int count = 0;
 	 unsigned int checkup = static_cast<unsigned int>(Npts*0.01);
 	 for (unsigned int j =0; j<Npts; j++) {
 // 	    if (++count == checkup) {
-// 	       print(COOLL::round(double(j)/Npts*100));cout <<" %"<<endl;
+// 	       print(Matricks::round(double(j)/Npts*100));cout <<" %"<<endl;
 // 	       count =0;
 // 	    }
 	    bTotalandbCoils(X[j],Btotal[j], Bcoils[j]);
@@ -460,12 +460,12 @@ int main (int argc, char *argv[])
 	 STOPTIME(tbuff,ckstart);
 
 
-	 LAvector<p3vector<double> > v_normal(Npts, "v_normal");
+	 Vector<p3vector<double> > v_normal(Npts, "v_normal");
 	 for (unsigned int j =0; j<Npts; j++)
 	    v_normal[j] = dA_dtdp[j]/norm(dA_dtdp[j]);
 
-	 LAvector<double> Flux(Npts, "Flux");
-	 LAvector<double> dFlux(Npts, "dFlux");
+	 Vector<double> Flux(Npts, "Flux");
+	 Vector<double> dFlux(Npts, "dFlux");
  
 	 // calculate flux, then delta flux
 	 for (unsigned int j =0; j<Npts; j++) {
@@ -476,7 +476,7 @@ int main (int argc, char *argv[])
 
 
 	 // Create fourier series for flux
-	 LAvector<complex<double> > dFluxF(NFR,"dFluxF");
+	 Vector<complex<double> > dFluxF(NFR,"dFluxF");
 	 transformfunction(dFlux,dFluxF,fsR);
 
 	 for (unsigned int r =0; r<NFR; r++) 

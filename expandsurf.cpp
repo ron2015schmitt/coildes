@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -71,14 +71,14 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   bool mode00 = true;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -107,8 +107,8 @@ int main (int argc, char *argv[])
  
   // lay surface onto grid 
   
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > A(Npts, "A");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > A(Npts, "A");
 
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -121,13 +121,13 @@ int main (int argc, char *argv[])
 
 
   // create surface normals
-  LAvector<p3vector<double> > n(Npts, "n");
+  Vector<p3vector<double> > n(Npts, "n");
   for (unsigned int j =0; j<Npts; j++)
     n[j] = A[j] / norm(A[j]);
 
 
-  LAvector<double> r(Npts, "r");
-  LAvector<double> z(Npts, "z");
+  Vector<double> r(Npts, "r");
+  Vector<double> z(Npts, "z");
   for (unsigned int j =0; j<Npts; j++) {
     r[j] = sqrt(sqr(X[j].x()) + sqr(X[j].y()));
     z[j] = X[j].z();

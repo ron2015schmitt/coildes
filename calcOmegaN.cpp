@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -78,7 +78,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -86,7 +86,7 @@ int main (int argc, char *argv[])
 
    //////////////////////////////////////
 
- //   LAvector<complex<double> > v(1);
+ //   Vector<complex<double> > v(1);
 //    "{(5,2)}">>v;
 //    dispcr(v);
 
@@ -96,7 +96,7 @@ int main (int argc, char *argv[])
 //    dispcr(A);
    
 //    Matrix<complex<double> > Ainv(2,2);
-//    cooll_lapack::inv(A,Ainv);
+//    matricks_lapack::inv(A,Ainv);
 
 //    dispcr(A);
 //    dispcr(Ainv);
@@ -105,8 +105,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
   
    ostringstream strmtmp1;
@@ -118,8 +118,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -130,8 +130,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -206,15 +206,15 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
    cout << endl;
    cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -222,7 +222,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
-  LAvector<double> J(Npts, "J");
+  Vector<double> J(Npts, "J");
   for (unsigned int j =0; j<Npts; j++) {
      J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
   }
@@ -236,8 +236,8 @@ int main (int argc, char *argv[])
 
    // lay coil surface onto grid 
   
-   LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-   LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+   Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+   Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -274,21 +274,21 @@ int main (int argc, char *argv[])
 
    STARTTIME(tbuff,ckstart);
 
-   LAvector<p3vector<double> > B(Npts, "B");
+   Vector<p3vector<double> > B(Npts, "B");
 
    cout <<endl<< "$ Loading BTOTAL_theta fourier coefficients from " << Bt_filename << endl;
    cout <<endl<< "$ Loading BTOTAL_phi fourier coefficients from " << Bp_filename << endl;
 
-   LAvector<complex<double> > BtF(NF,"BtF");
+   Vector<complex<double> > BtF(NF,"BtF");
    if (load_coefs( Bt_filename,CoefFileFormat_sincos,nn,mm,BtF))
       return 5;
-   LAvector<complex<double> > BpF(NF,"BpF");
+   Vector<complex<double> > BpF(NF,"BpF");
    if (load_coefs( Bp_filename,CoefFileFormat_sincos,nn,mm,BpF))
       return 6;
 
-   LAvector<double> Bt(Npts, "Bt");
+   Vector<double> Bt(Npts, "Bt");
    expandfunction(Bt,BtF,fs);
-   LAvector<double> Bp(Npts, "Bp");
+   Vector<double> Bp(Npts, "Bp");
    expandfunction(Bp,BpF,fs);
 
    for (unsigned int j =0; j<Npts; j++)
@@ -302,8 +302,8 @@ int main (int argc, char *argv[])
    printcr("Find contravariant * J vector components.");
 
    STARTTIME(tbuff,ckstart);
-   LAvector<double> JBt(Npts,"JBt");
-   LAvector<double> JBp(Npts,"JBp");
+   Vector<double> JBt(Npts,"JBt");
+   Vector<double> JBp(Npts,"JBp");
  
    for (unsigned int j =0; j<Npts; j++) {
       JBt[j] = J[j] * Bt[j];
@@ -349,16 +349,16 @@ int main (int argc, char *argv[])
 
    cout << endl;
    cout<<"$ calculate expected eigen values"<<endl;
-   LAvector<double> EV(NFR,"EV");
+   Vector<double> EV(NFR,"EV");
    EV = abs(nnR + iota*mmR);
    //dispcr(EV);
 
    cout << endl;
    cout<<"$ sort expected eigen values"<<endl;
-   LAvector<unsigned int> ii;
+   Vector<unsigned int> ii;
    ii = sortwind(EV);
-   LAvector<double> mmRsorted(NFR,"mmRsorted");
-   LAvector<double> nnRsorted(NFR,"nnRsorted");
+   Vector<double> mmRsorted(NFR,"mmRsorted");
+   Vector<double> nnRsorted(NFR,"nnRsorted");
    mmRsorted = mmR[ii];
    nnRsorted = nnR[ii];
 
@@ -387,7 +387,7 @@ int main (int argc, char *argv[])
 
 
    Matrix<complex<double> > V(NFR,NFR,"V");
-   LAvector<complex<double> >  W(NFR,"W");
+   Vector<complex<double> >  W(NFR,"W");
 
    // Calculate Omega matrix
   
@@ -425,7 +425,7 @@ int main (int argc, char *argv[])
      
    STARTTIME(tbuff,ckstart);
 
-   cooll_lapack::eigwincsort(OmegaN,V,W);
+   matricks_lapack::eigwincsort(OmegaN,V,W);
    OmegaN.clear();
      
    STOPTIME(tbuff,ckstart);

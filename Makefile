@@ -1,133 +1,75 @@
 
 
 SHELL=/bin/bash
-COOLLDIR = /home/rs2015/intel_versions/cool_1.91beta
-LSODEDIR = /home/rs2015/lsode
-FFTWDIR = /home/rs2015/fftw-3.0.1
+
+
+DIR_MATRICKS = ./matricks
+INC_MATRICKS = -I $(DIR_MATRICKS) 
+LIB_MATRICKS = -L$(DIR_MATRICKS) -lmatricks
+LIBFILE_MATRICKS = $(DIR_MATRICKS)/libmatricks.a
+
+
+INCLUDES = $(INC_MATRICKS)
+LIBS =  $(LIB_MATRICKS) 
+
+
+
+
+# C++ compiler
+CPPOPT = 
+CPPC = g++
+CPPFLAGS = $(CPPOPT) $(INCLUDES)
+
+# linker
+LNKOPT =
+LDFLAGS = $(LNKOPT)  
+LNK = g++
+
+# FORTRAN COMPILER
+FC = gfortran
+
 
 
 #notes:  -v option on g++/gcc is useful for 
-
 # use this variable to set gcc/g++ compile options from command line
 # just write 'CLOPTS=yada yada yada' at end of command line
 # example for generating gprof output:
 #   make coils 'COPTS=-pg' 'LOPTS=-pg'
 
-COPTS = 
-LOPTS =
+#LNKOPT=-no-ipo  #-cxxlib-gcc #-i-static -static #-nodefaultlibs
 
-#-O1    optimize for maximum speed, but disable some optimizations which
-#       increase code size for a small speed benefit.
-#-O2    enable optimizations (DEFAULT)
-#-O3    enable -O2 plus more aggressive optimizations that may not improve
-#       performance for all programs
-#-O0    disable optimizations
-#-O     same as -O2
-#-Os    enable speed optimizations, but disable some optimizations which
-#       increase code size for small speed benefit
-#-ax<codes> generate code specialized for processors specified by <codes>
-#           while also generating generic IA-32 code.  <codes> includes
-#           one or more of the following characters:
-#    K  Intel Pentium III and compatible Intel processors
-#    W  Intel Pentium 4 and compatible Intel processors
-#    N  Intel Pentium 4 and compatible Intel processors.  Enables new
-#       optimizations in addition to Intel processor-specific optimizations
-#    P  Intel Pentium 4 processors with SSE3 extensions
-#    B  Intel Pentium M and compatible Intel processors
-#-x<codes>  generate specialized code to run exclusively on processors
-#           indicated by <codes> as described above.
-#
-#Enable and specify the scope of Interprocedural (IP) Optimizations:
-#-ip     enable single-file IP optimizations (within files)
-#-ipo[n] enable multi-file IP optimizations (between files)
-#-ipo-c  generate a multi-file object file (ipo_out.o)
-#-ip-no-inlining    disable full and partial inlining (requires -ip or -ipo)
-#-ip-no-pinlining   disable partial inlining (requires -ip or -ipo)
-#-ipo-separate      create one object file for every source file
-#                   (overrides -ipo[n])
-#-w                 disable all warnings
-#-w<n>              control diagnostics:
-#   n=0               display errors (same as -w)
-#   n=1               display warnings and errors (DEFAULT)
-#   n=2               display remarks, warnings, and errors
-#-static        prevents linking with shared libraries
-#-rcd          rounding mode to enable fast float-to-int conversions
+#INC_FFTW = -I $(FFTWDIR)/include 
 
-CXXOPT = -w -xW #-O3 
-
-#use either (CXX -no-ipo and LNK -no-ipo) or (CXX -ipo-c and LNK -ipo)
-CXX = /usr/local/intel/cc/9.0/bin/icpc -no-ipo 
-
-
-#-i-dynamic     link Intel provided libraries dynamically
-#-i-static      link Intel provided libraries statically
-#-dynamic-linker<file>
-#               select dynamic linker other than the default
-#-no-cpprt      do not link in C++ runtime libraries
-#-nodefaultlibs do not use standard libraries when linking
-#-nostartfiles  do not use standard startup files when linking
-#-nostdlib      do not use standard libraries and startup files when linking
-#-static        prevents linking with shared libraries
-#-shared        produce a shared object
-#-static-libcxa link Intel libcxa C++ library statically
-#-shared-libcxa link Intel libcxa C++ library dynamically, overrides the default
-#               behavior when -static is used
-#-cxxlib-<mode> tell the compiler which C++ run-time libraries to use
-#               gcc[=dir] - link using C++ run-time libraries provided with gcc
-#                           (default on systems running gcc 3.2 or above)
-#                           dir is an optional top-level location for the gcc
-#                           binaries and libraries
-#               icc       - link using C++ run-time libraries provided by Intel
-#                           (default on systems running a gcc version lower
-#                            than 3.2)
-LNKOPT=-no-ipo  #-cxxlib-gcc #-i-static -static #-nodefaultlibs
-LNK = /usr/local/intel/cc/9.0/bin/icpc 
-
-
-INC_FFTW = -I $(FFTWDIR)/include 
-INC_COOLL = -I $(COOLLDIR) 
-INCLUDES = $(INC_COOLL) $(INC_FFTW)
-
-# intel lapack
-LIB_LAPACK =  -L/usr/local/intel/mkl/8.0/lib/32 -lmkl_lapack -lmkl_ia32 -lguide -lpthread
-# standard lapack
 #LIB_LAPACK= -llapack 
-LIB_FFTW = -L$(FFTWDIR)/lib -lfftw3 
+#LIB_FFTW = -L$(FFTWDIR)/lib -lfftw3 
 
-LIB_COOLL = -L$(COOLLDIR) -lcooll
 
-LIB_LSODE= -L$(LSODEDIR) -llsode
+#LIB_LSODE= -L$(LSODEDIR) -llsode
+#LSODEDIR = /home/rs2015/lsode
+#FFTWDIR = /home/rs2015/fftw-3.0.1
 
-LIB_NAG= -L/usr/local/lib -lnag 
 
 # do we need -lircmt?
 #LIB_FORTRAN = -lfio -lblas -lf77math -lf90math -L/usr/local/intel/fc/9.0/lib -lifcore -lifcoremt -lcxa -lcprts -lunwind -lirc  -lsvml -lompstub -limf  -lcxaguard -lifport -lguide -lguide_stats 
-LIB_FORTRAN = -L/usr/local/intel/fc/9.0/lib -lifcore
+#LIB_FORTRAN = -L/usr/local/intel/fc/9.0/lib -lifcore
 
 
-LIBS =  $(LIB_COOLL) 
-LIBS_C =  -L/usr/local/intel/cc/9.0/lib $(LIB_COOLL) 
-LIBS_FIELD = $(LIB_LSODE)  $(LIB_NAG) $(LIB_FORTRAN)
-
-
-CXXFLAGS =  $(CXXOPT)  $(COPTS) $(INCLUDES)
-
-LDFLAGS =  $(LOPTS) $(LNKOPT)  
-
-INC = 
+#LIBS_C =  -L/usr/local/intel/cc/9.0/lib $(LIB_COOLL) 
+#LIBS_FIELD = $(LIB_LSODE)  $(LIB_NAG) $(LIB_FORTRAN)
 
 
 
-EXEC_MAIN = Bnormal2current flux2current current2Bnormal current2flux scoild
-EXEC_MAIN_FFT = Bnormal2current_fft flux2current_fft current2Bnormal_fft current2flux_fft scoild_fft scoild_fft_II scoild_fft_IIb scoild_fft_III scoild_fft_IV scoild_fft_V scoild_fft_VI scoild_fft_VII scoild_fft_VIII scoild_fft_IX scoild_fft_X scoild_fft_XI scoild_fft_Xa scoild_fft_XIa  scoild_fft_XII scoild_fft_XIIa scoild_fft_XIII scoild_fft_XIIIa  scoild_fft_XIV  scoild_fft_XV
+#EXEC_MAIN = Bnormal2current flux2current current2Bnormal current2flux scoild
+#EXEC_MAIN_FFT = Bnormal2current_fft flux2current_fft current2Bnormal_fft current2flux_fft scoild_fft scoild_fft_II scoild_fft_IIb scoild_fft_III scoild_fft_IV scoild_fft_V scoild_fft_VI scoild_fft_VII scoild_fft_VIII scoild_fft_IX scoild_fft_X scoild_fft_XI scoild_fft_Xa scoild_fft_XIa  scoild_fft_XII scoild_fft_XIIa scoild_fft_XIII scoild_fft_XIIIa  scoild_fft_XIV  scoild_fft_XV
 #EXEC_BTRAJ =  calcBtraj calcBtrajfromCoils
 #EXEC_BONSURF = calcBonsurf calcBonsurffromCoils 
-EXEC_AUXILIARY =  mkcoilsurf  expandsurf surfF findpertsurface deltasurfs deltaflux percentdelta reduceflux rankorder findpertsurface_fft expandfunc calcIpol onlyharms expandI cullF cutcoils iotafromIF projectBw divfuncs calcGammaOmega calcOmegaN calcOmegaN_fft cart2contravariantF cart2contravariantJF b2lambda lambda2b calcOmegas calcMs calcJ testfft
-EXEC_OTHER = garabedian2sincos garabedian2sincosII  garabedian_current2sincos
-EXEC_TEMP = temp
+#EXEC_AUXILIARY =  mkcoilsurf  expandsurf surfF findpertsurface deltasurfs deltaflux percentdelta reduceflux rankorder findpertsurface_fft expandfunc calcIpol onlyharms expandI cullF cutcoils iotafromIF projectBw divfuncs calcGammaOmega calcOmegaN calcOmegaN_fft cart2contravariantF cart2contravariantJF b2lambda lambda2b calcOmegas calcMs calcJ testfft
+#EXEC_OTHER = garabedian2sincos garabedian2sincosII  garabedian_current2sincos
+#EXEC_TEMP = temp
 
-EXEC = $(EXEC_MAIN) $(EXEC_MAIN_FFT)  $(EXEC_AUXILIARY) $(EXEC_OTHER) 
+#EXEC = $(EXEC_MAIN) $(EXEC_MAIN_FFT)  $(EXEC_AUXILIARY) $(EXEC_OTHER) 
 
+EXEC = 
 
 TESTS = 
 
@@ -143,9 +85,7 @@ CPROGS =
 all: $(EXEC)
 
 
-
-
-tests: $(TEST)
+tests: $(TESTS)
 
 clean:
 	@command rm -f *.o
@@ -157,18 +97,20 @@ def:
 	echo "nothing done"
 
 
+$(LIBFILE_MATRICKS):
+	cd matricks && ./configure
 
 
-%.o: %.cpp coils.hpp 
+%.o: %.cpp coils.hpp $(LIBFILE_MATRICKS)
 ifdef CAREFUL
-	$(CXX) $(CXXFLAGS) -D"COOLL_CAREFUL=1" -c $*.cpp -o $@
+	$(CPPC) $(CPPFLAGS) -D"MATRICKS_CAREFUL=1" -c $*.cpp -o $@
 else
-	$(CXX) $(CXXFLAGS) -c $*.cpp -o $@
+	$(CPPC) $(CPPFLAGS) -c $*.cpp -o $@
 endif
  
 
 %: %.o 
-	$(CXX) $(LDFLAGS) $*.o -o $@ $(LIBS_C) 
+	$(CPPC) $(LDFLAGS) $*.o -o $@ $(LIBS) 
 
 calc_%: calcBtraj_% calcBtrajfromCoils_% calcBonsurf_% calcBonsurffromCoils_% 
 	@echo

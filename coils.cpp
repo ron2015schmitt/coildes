@@ -2,7 +2,7 @@
 #include "coils.hpp"
 
 // massage in place--real numbers
-void massage(LAvector<double>& x, const double relative_small)
+void massage(Vector<double>& x, const double relative_small)
 {
   
   double maxval = max(abs(x));
@@ -30,8 +30,8 @@ void massage(FourierSurface& f, const double relative_small)
 {
   
   double maxval = 0;
-  LAvector<double>& RF = f.RF();
-  LAvector<double>& ZF = f.ZF();
+  Vector<double>& RF = f.RF();
+  Vector<double>& ZF = f.ZF();
   const unsigned int N = RF.size();
 
   //find max value
@@ -63,7 +63,7 @@ void massage(FourierSurface& f, const double relative_small)
 
 
 // massage in place--complex numbers
-void massage(LAvector<complex<double> >& x, const double relative_small)
+void massage(Vector<complex<double> >& x, const double relative_small)
 {
   
   double maxreal = max(abs(real(x)));
@@ -110,7 +110,7 @@ void massage(Matrix<complex<double> >& x, const double relative_small)
 
 
 // massage in place--complex numbers
-void massage_absolute(LAvector<complex<double> >& x, const double absolute_small)
+void massage_absolute(Vector<complex<double> >& x, const double absolute_small)
 {
   
   double SMALL = absolute_small;
@@ -152,7 +152,7 @@ void massage_absolute(Matrix<complex<double> >& x, const double absolute_small)
 
 
 
-double gridspacing(const LAvector<p3vector<double> >& XX) {
+double gridspacing(const Vector<p3vector<double> >& XX) {
 
   double delx = XX[1].x() - XX[0].x();
   double dely = XX[1].y() - XX[0].y();
@@ -163,7 +163,7 @@ double gridspacing(const LAvector<p3vector<double> >& XX) {
 
 
 
-double coil2plasmaspacing(const LAvector<p3vector<double> >& XX, const LAvector<p3vector<double> >& XXcoil) {
+double coil2plasmaspacing(const Vector<p3vector<double> >& XX, const Vector<p3vector<double> >& XXcoil) {
 
   double delx = XXcoil[0].x() - XX[0].x();
   double dely = XXcoil[0].y() - XX[0].y();
@@ -174,7 +174,7 @@ double coil2plasmaspacing(const LAvector<p3vector<double> >& XX, const LAvector<
 
 
 
-void printfouriercoefs(const LAvector<double>& nn,const LAvector<double>& mm, const LAvector<double>& v1) {
+void printfouriercoefs(const Vector<double>& nn,const Vector<double>& mm, const Vector<double>& v1) {
   const unsigned int NF = nn.size();
   const char* s = v1.debugtxt().c_str();
 
@@ -200,9 +200,9 @@ void printfouriercoefs(const LAvector<double>& nn,const LAvector<double>& mm, co
 }
 
 
-void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm, 
-		       const LAvector<double>&  v1,
-		       const LAvector<double>&  v2,
+void printfouriercoefs(const Vector<double>& nn, const Vector<double>& mm, 
+		       const Vector<double>&  v1,
+		       const Vector<double>&  v2,
 		       const unsigned int precision,
 		       const unsigned int fieldwidth)
 {
@@ -243,11 +243,11 @@ void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm,
 
 
 
-void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm, 
-		       const LAvector<double>&  v1,
-		       const LAvector<double>&  v2,
-		       const LAvector<double>&  v3,
-		       const LAvector<double>&  v4,
+void printfouriercoefs(const Vector<double>& nn, const Vector<double>& mm, 
+		       const Vector<double>&  v1,
+		       const Vector<double>&  v2,
+		       const Vector<double>&  v3,
+		       const Vector<double>&  v4,
 		       const unsigned int fieldwidth) {
   const unsigned int NF = nn.size();
 

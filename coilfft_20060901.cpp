@@ -20,7 +20,7 @@
 
 
 using namespace std;
-using namespace COOLL;
+using namespace Matricks;
 
 
 
@@ -50,7 +50,7 @@ void null_small_values(fftw_complex *x, const unsigned int N, const double relat
 
 
 //use N1 = Nphi, N2=Ntheta
-void testfunc(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF, 
+void testfunc(const Vector<complex<double> >& v, Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -134,7 +134,7 @@ void testfunc(const LAvector<complex<double> >& v, LAvector<complex<double> >& v
 
 
 //use N1 = Nphi, N2=Ntheta
-void fft2d(const LAvector<double>& v, LAvector<complex<double> >& vF, 
+void fft2d(const Vector<double>& v, Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -235,7 +235,7 @@ void fft2d(const LAvector<double>& v, LAvector<complex<double> >& vF,
 
 
 //use N1 = Nphi, N2=Ntheta
-void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF, 
+void fft2d(const Vector<complex<double> >& v, Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -341,7 +341,7 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 
 
 //use N1 = Nphi, N2=Ntheta
-void ifft2d(LAvector<complex<double> >& v, const LAvector<complex<double> >& vF, 
+void ifft2d(Vector<complex<double> >& v, const Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -716,10 +716,10 @@ void fft_of_M(Matrix<double>& M, Matrix<complex<double> >& MF,
   // remove n=0,m=0 mode and unwanted modes  and scale output
 
    unsigned int NFrow;
-  LAvector<unsigned int> Fmap_row;
+  Vector<unsigned int> Fmap_row;
   make_mode_map(NFrow,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_row);
    unsigned int NFcol;
-  LAvector<unsigned int> Fmap_col;
+  Vector<unsigned int> Fmap_col;
   make_mode_map(NFcol,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_col);
 
   MF.resize(NFrow,NFcol); 
@@ -764,7 +764,7 @@ void half_fft_of_M(Matrix<double>& M, Matrix<complex<double> >& MF,
   M.resize(0,0);
 
 
-  LAvector<unsigned int> Fmap_col;
+  Vector<unsigned int> Fmap_col;
   unsigned int NFcol = 0;
 
   make_mode_map(NFcol,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_col);
@@ -820,7 +820,7 @@ void omega_half_fft(Matrix<complex<double> >& Bdotgradf, Matrix<complex<double> 
   // remove n=0,m=0 mode and unwanted modes  and scale output
 
   unsigned int NFcol;
-  LAvector<unsigned int> Fmap_col;
+  Vector<unsigned int> Fmap_col;
   make_mode_map(NFcol,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_col);
 
   dispcr(NFcol);

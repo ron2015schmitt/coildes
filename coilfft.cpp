@@ -20,7 +20,7 @@
 
 
 using namespace std;
-using namespace COOLL;
+using namespace Matricks;
 
 
 
@@ -61,14 +61,14 @@ void null_small_values(fftw_complex *x, const unsigned int N, const double relat
 
 
 //use N1 = Nphi, N2=Ntheta
-void fft2d(const LAvector<double>& v, LAvector<complex<double> >& vF, 
+void fft2d(const Vector<double>& v, Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
 	   const double neglect, const double scale, const bool mode00)
 {  
    const int sign = -1;
-   //   printcr("fft of real LAvector");
+   //   printcr("fft of real Vector");
 
 
    if (maxNF1 > (N1/2)) {
@@ -177,7 +177,7 @@ void fft2d(const LAvector<double>& v, LAvector<complex<double> >& vF,
 //  2D FFT of a COMPLEX VECTOR
 ////////////////////////////////////////////////////////////////////////////
 //use N1 = Nphi, N2=Ntheta
-void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF, 
+void fft2d(const Vector<complex<double> >& v, Vector<complex<double> >& vF, 
 	   const unsigned int N1, const unsigned int N2,
 	   const unsigned int maxNF1, const unsigned int maxNF2,
 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -185,7 +185,7 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 {  
 
    const int sign = -1;
-   //   printcr("fft of complex LAvector");
+   //   printcr("fft of complex Vector");
 
 
   if (maxNF1 > (N1/2)) {
@@ -301,7 +301,7 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 //////////////////////////////////////////////////////////////////
 
 
-// void testfunc(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF, 
+// void testfunc(const Vector<complex<double> >& v, Vector<complex<double> >& vF, 
 // 	   const unsigned int N1, const unsigned int N2,
 // 	   const unsigned int maxNF1, const unsigned int maxNF2,
 // 	   const unsigned int N1delta, const unsigned int N2delta,
@@ -309,7 +309,7 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 // {  
 
 //    const int sign = -1;
-//    //   printcr("fft of complex LAvector");
+//    //   printcr("fft of complex Vector");
 
 
 //   if (maxNF1 > (N1/2)) {
@@ -350,11 +350,11 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 //   null_small_values(x2,NF,neglect);
 
 //   /////////////
-//   LAvector <double> datavec("datavec");
+//   Vector <double> datavec("datavec");
 //   datavec.perline(1);
 //   datavec.textformat(text_nobraces);
 
-//   LAvector<complex<double> > v2(NF,"v2");
+//   Vector<complex<double> > v2(NF,"v2");
 //   for (unsigned int i=0; i<Npts; i++) {
 //      v2[i] = std::complex<double>(x2[i][0],x2[i][1]);
 //   }  
@@ -467,7 +467,7 @@ void fft2d(const LAvector<complex<double> >& v, LAvector<complex<double> >& vF,
 //  2D inverse FFT to a COMPLEX VECTOR
 ////////////////////////////////////////////////////////////////////////////
 //use N1 = Nphi, N2=Ntheta
-void ifft2d(LAvector<complex<double> >& v, const LAvector<complex<double> >& vF, 
+void ifft2d(Vector<complex<double> >& v, const Vector<complex<double> >& vF, 
 	    const unsigned int N1, const unsigned int N2,
 	    const unsigned int maxNF1, const unsigned int maxNF2,
 	    const unsigned int N1delta, const unsigned int N2delta,
@@ -480,7 +480,7 @@ void ifft2d(LAvector<complex<double> >& v, const LAvector<complex<double> >& vF,
   const unsigned int NF=N1*(N2);
 
    const int sign = +1;
-   //   printcr("ifft of complex LAvector");
+   //   printcr("ifft of complex Vector");
 
 
   if (maxNF1 > (N1/2)) {
@@ -593,7 +593,7 @@ void ifft2d(LAvector<complex<double> >& v, const LAvector<complex<double> >& vF,
 // symmetry exhibited by teh fourier series of real vectors
 ////////////////////////////////////////////////////////////////////////////
 //use N1 = Nphi, N2=Ntheta
-void ifft2d(LAvector<double>& v, const LAvector<complex<double> >& vF, 
+void ifft2d(Vector<double>& v, const Vector<complex<double> >& vF, 
 	    const unsigned int N1, const unsigned int N2,
 	    const unsigned int maxNF1, const unsigned int maxNF2,
 	    const unsigned int N1delta, const unsigned int N2delta,
@@ -606,7 +606,7 @@ void ifft2d(LAvector<double>& v, const LAvector<complex<double> >& vF,
   const unsigned int NF=N1*(N2);
 
    const int sign = +1;
-   //   printcr("ifft of complex LAvector");
+   //   printcr("ifft of complex Vector");
 
 
   if (maxNF1 > (N1/2)) {
@@ -1004,10 +1004,10 @@ void fft_of_M(Matrix<double>& M, Matrix<complex<double> >& MF,
    // remove n=0,m=0 mode and unwanted modes and scale output
 
    unsigned int NFrow;
-   LAvector<unsigned int> Fmap_row;
+   Vector<unsigned int> Fmap_row;
    make_mode_map(NFrow,Nnn_P,Nmm_P,Ndelta,Mdelta,false,NF_P,Nnn_P,Nmm_P,1,1,true,Fmap_row);
    unsigned int NFcol;
-   LAvector<unsigned int> Fmap_col;
+   Vector<unsigned int> Fmap_col;
    make_mode_map(NFcol,Nnn_C,Nmm_C,Ndelta,Mdelta,false,NF_C,Nnn_C,Nmm_C,1,1,true,Fmap_col);
 
    MF.resize(NFrow,NFcol); 
@@ -1058,10 +1058,10 @@ void fft_of_M(Matrix<double>& M, Matrix<complex<double> >& MF,
    // remove n=0,m=0 mode and unwanted modes  and scale output
 
    unsigned int NFrow;
-   LAvector<unsigned int> Fmap_row;
+   Vector<unsigned int> Fmap_row;
    make_mode_map(NFrow,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_row);
    unsigned int NFcol;
-   LAvector<unsigned int> Fmap_col;
+   Vector<unsigned int> Fmap_col;
    make_mode_map(NFcol,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_col);
 
    MF.resize(NFrow,NFcol); 
@@ -1109,7 +1109,7 @@ void half_fft_of_M(Matrix<double>& M, Matrix<complex<double> >& MF,
    //   M.resize(0,0);
 
 
-   LAvector<unsigned int> Fmap_col;
+   Vector<unsigned int> Fmap_col;
    unsigned int NFcol = 0;
 
 
@@ -1168,7 +1168,7 @@ void omega_half_fft(Matrix<complex<double> >& Bdotgradf, Matrix<complex<double> 
    // remove n=0,m=0 mode and unwanted modes  and scale output
 
    unsigned int NFcol;
-   LAvector<unsigned int> Fmap_col;
+   Vector<unsigned int> Fmap_col;
    make_mode_map(NFcol,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_col);
 
    dispcr(NFcol);
@@ -1227,7 +1227,7 @@ dispcr(Mdelta);
    // remove n=0,m=0 mode and unwanted modes  and scale output
 
    unsigned int NFrow;
-   LAvector<unsigned int> Fmap_row;
+   Vector<unsigned int> Fmap_row;
    make_mode_map(NFrow,Nnn,Nmm,Ndelta,Mdelta,false,NF,Nnn,Nmm,1,1,true,Fmap_row);
 
    dispcr(NFrow);

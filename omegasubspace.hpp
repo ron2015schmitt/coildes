@@ -13,7 +13,7 @@ using namespace std;
 
 
 
-void omegasubspace(LAvector<p3vector<double> >& grad_r, Matrix<complex<double> >& fs, 
-		   LAvector<double>& nn, LAvector<double>& mm,
+void omegasubspace(Vector<p3vector<double> >& grad_r, Matrix<complex<double> >& fs, 
+		   Vector<double>& nn, Vector<double>& mm,
 		   Matrix<complex<double> >& fsR2,
-		   LAvector<double>& nnR2, LAvector<double>& mmR2);
+		   Vector<double>& nnR2, Vector<double>& mmR2);

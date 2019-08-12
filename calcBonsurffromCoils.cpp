@@ -77,7 +77,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -85,20 +85,20 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
    const unsigned int NptsI = NthetaI*NphiI;
-   LAvector<double> thetasI(NptsI,"thetasI");
-   LAvector<double> phisI(NptsI,"phisI");
+   Vector<double> thetasI(NptsI,"thetasI");
+   Vector<double> phisI(NptsI,"phisI");
    anglevectors(thetasI, phisI, NthetaI, NphiI);
 
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   bool mode00 = true;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -122,14 +122,14 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
-  LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-  LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-  LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-  LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-  LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-  LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
+  Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+  Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+  Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+  Vector<p3vector<double> > grad_r(Npts,"grad_r");
+  Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+  Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
  
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -159,13 +159,13 @@ int main (int argc, char *argv[])
  
   STARTTIME(tbuff,ckstart);
 
-  LAvector<p3vector<double> > Bcoils(Npts, "Bcoils");
-  LAvector<p3vector<double> > Btotal(Npts, "Btotal");
+  Vector<p3vector<double> > Bcoils(Npts, "Bcoils");
+  Vector<p3vector<double> > Btotal(Npts, "Btotal");
   unsigned int count = 0;
   unsigned int checkup = static_cast<unsigned int>(Npts*0.01);
   for (unsigned int j =0; j<Npts; j++) {
     if (++count == checkup) {
-      print(COOLL::round(double(j)/Npts*100));cout <<" %"<<endl;
+      print(Matricks::round(double(j)/Npts*100));cout <<" %"<<endl;
       count =0;
     }
     bTotalandbCoils(X[j],Btotal[j], Bcoils[j]);
@@ -177,19 +177,19 @@ int main (int argc, char *argv[])
 
 
 
-  LAvector<double> Br(Npts, "Bn");
-  LAvector<double> Bt(Npts, "Bt");
-  LAvector<double> Bp(Npts, "Bp");
+  Vector<double> Br(Npts, "Bn");
+  Vector<double> Bt(Npts, "Bt");
+  Vector<double> Bp(Npts, "Bp");
 
-  LAvector<double> J(Npts, "J");
+  Vector<double> J(Npts, "J");
 
-  LAvector<double> JBr(Npts, "JBr");
-  LAvector<double> JBt(Npts, "JBt");
-  LAvector<double> JBp(Npts, "JBp");
+  Vector<double> JBr(Npts, "JBr");
+  Vector<double> JBt(Npts, "JBt");
+  Vector<double> JBp(Npts, "JBp");
 
-  LAvector<double> Flux(Npts, "Flux");
-  LAvector<double> Br_coils(Npts, "Br_coils");
-  LAvector<double> Flux_coils(Npts, "Flux_coils");
+  Vector<double> Flux(Npts, "Flux");
+  Vector<double> Br_coils(Npts, "Br_coils");
+  Vector<double> Flux_coils(Npts, "Flux_coils");
  
   for (unsigned int j =0; j<Npts; j++) {
      // calculate contravariant components
@@ -228,7 +228,7 @@ int main (int argc, char *argv[])
   cout<<"$ save data in various formats" <<endl;
 
 
-  LAvector<complex<double> > FluxF(NF,"FluxF");
+  Vector<complex<double> > FluxF(NF,"FluxF");
   transformfunction(Flux,FluxF,fs);
   massage(FluxF,1e-10);
   save_coefs("FluxF.out",CoefFileFormat_sincos,nn,mm,FluxF);
@@ -238,58 +238,58 @@ int main (int argc, char *argv[])
   save(Flux,"Flux.out");
 
 
-  LAvector<complex<double> > Br_coilsF(NF,"Br_coilsF");
+  Vector<complex<double> > Br_coilsF(NF,"Br_coilsF");
   transformfunction(Br_coils,Br_coilsF,fs);
   massage(Br_coilsF,1e-10);
   save_coefs("Br_coilsF.out",CoefFileFormat_sincos,nn,mm,Br_coilsF);
 
-  LAvector<complex<double> > Flux_coilsF(NF,"Flux_coilsF");
+  Vector<complex<double> > Flux_coilsF(NF,"Flux_coilsF");
   transformfunction(Flux_coils,Flux_coilsF,fs);
   massage(Flux_coilsF,1e-10);
   save_coefs("Flux_coilsF.out",CoefFileFormat_sincos,nn,mm,Flux_coilsF);
 
 
-  LAvector<complex<double> > BrF(NF,"BrF");
+  Vector<complex<double> > BrF(NF,"BrF");
   transformfunction(Br,BrF,fs);
   massage(BrF,1e-10);
   save_coefs("BrTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,BrF);
 
-  LAvector<complex<double> > BtF(NF,"BtF");
+  Vector<complex<double> > BtF(NF,"BtF");
   transformfunction(Bt,BtF,fs);
   massage(BtF,1e-10);
   save_coefs("BtTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,BtF);
 
-  LAvector<complex<double> > BpF(NF,"BpF");
+  Vector<complex<double> > BpF(NF,"BpF");
   transformfunction(Bp,BpF,fs);
   massage(BpF,1e-10);
   save_coefs("BpTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,BpF);
 
 
 
-  LAvector<complex<double> > JBrF(NF,"JBrF");
+  Vector<complex<double> > JBrF(NF,"JBrF");
   transformfunction(JBr,JBrF,fs);
   massage(JBrF,1e-10);
   save_coefs("JBrTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,JBrF);
 
-  LAvector<complex<double> > JBtF(NF,"JBtF");
+  Vector<complex<double> > JBtF(NF,"JBtF");
   transformfunction(JBt,JBtF,fs);
   massage(JBtF,1e-10);
   save_coefs("JBtTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,JBtF);
 
-  LAvector<complex<double> > JBpF(NF,"JBpF");
+  Vector<complex<double> > JBpF(NF,"JBpF");
   transformfunction(JBp,JBpF,fs);
   massage(JBpF,1e-10);
   save_coefs("JBpTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,JBpF);
 
 
-  LAvector<complex<double> > JF(NF,"JF");
+  Vector<complex<double> > JF(NF,"JF");
   transformfunction(J,JF,fs);
   massage(JF,1e-10);
   save_coefs("JF.out",CoefFileFormat_sincos,nn,mm,JF);
 
 
 
-  LAvector<complex<double> > JdivBF(NF,"JdivBF");
+  Vector<complex<double> > JdivBF(NF,"JdivBF");
   for (unsigned int k =0; k<NF; k++)
      JdivBF[k] = complex<double>(0.0,1.0)*(mm[k]*JBtF[k] + nn[k]*JBpF[k]);
   massage(JdivBF,1e-10);
@@ -312,9 +312,9 @@ int main (int argc, char *argv[])
 
 
 
-  LAvector<double> Bx(Npts, "Bx");
-  LAvector<double> By(Npts, "By");
-  LAvector<double> Bz(Npts, "Bz");
+  Vector<double> Bx(Npts, "Bx");
+  Vector<double> By(Npts, "By");
+  Vector<double> Bz(Npts, "Bz");
 
   for (unsigned int j =0; j<Npts; j++) {
      Bx[j] = Btotal[j].x();
@@ -372,13 +372,13 @@ int main (int argc, char *argv[])
 //   save(JdivBF,"JdivBF.out");
   ///////////////////////////////////////////////////////////
 
-  LAvector<double> JdivB(Npts, "JdivB");
+  Vector<double> JdivB(Npts, "JdivB");
   expandfunction(JdivB,JdivBF,fs);
 
-  LAvector<double> divB(Npts, "divB");
+  Vector<double> divB(Npts, "divB");
   for (unsigned int j =0; j<Npts; j++)
     divB[j] =  JdivB[j]/J[j];
-  LAvector<complex<double> > divBF(NF,"divBF");
+  Vector<complex<double> > divBF(NF,"divBF");
   transformfunction(divB,divBF,fs);
   massage(divBF,1e-10);
   save_coefs("divBTOTALF.fromcoils.out",CoefFileFormat_sincos,nn,mm,divBF);
@@ -400,7 +400,7 @@ int main (int argc, char *argv[])
   absFluxTotal = absFluxTotal * C;
 
 
-  LAvector<unsigned int> temp = findtrue((nn==0)&&(mm==0));
+  Vector<unsigned int> temp = findtrue((nn==0)&&(mm==0));
 print("index[n=0,m=0] = ");dispcr(temp);
   double JBTheta00 = JBtF[temp[0]].real()/(2*PI);
   double JBPhi00 = JBpF[temp[0]].real()/(2*PI);

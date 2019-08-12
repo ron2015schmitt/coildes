@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -74,8 +74,8 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
   // coefficient C is the integration coef for the fourier transform
@@ -87,15 +87,15 @@ int main (int argc, char *argv[])
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   modevectors(NF,nn,mm,Nnn,Nmm);
 
 
   // these exclude the n=0,m=0 case
-  LAvector<double> nnR("nnR");
-  LAvector<double> mmR("mmR");
+  Vector<double> nnR("nnR");
+  Vector<double> mmR("mmR");
   unsigned int NFR;
   modevectorsR(NFR,nnR,mmR,Nnn,Nmm);
 
@@ -132,11 +132,11 @@ int main (int argc, char *argv[])
   // at some point, add code so that user can select type of coef's from command line
 
   cout <<endl<< "$ Loading COIL CURRENT fourier coefficients from " << current_filename << endl;
-  LAvector<complex<double> > IF(NFR,"IF");
+  Vector<complex<double> > IF(NFR,"IF");
   if (load_coefs(current_filename,CoefFileFormat_sincos,nnR,mmR,IF))
     return 3;  
-  LAvector<double> IFreal(NFR,"IFreal");
-  LAvector<double> IFimag(NFR,"IFimag");
+  Vector<double> IFreal(NFR,"IFreal");
+  Vector<double> IFimag(NFR,"IFimag");
   IFreal = real(IF);
   IFimag = imag(IF);
 
@@ -147,8 +147,8 @@ int main (int argc, char *argv[])
  
   // lay plasma surface onto grid 
   
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -164,8 +164,8 @@ int main (int argc, char *argv[])
 
   // lay coil surface onto grid 
   
-  LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-  LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+  Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+  Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
   cout << endl;
   cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -228,7 +228,7 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<p3vector<double> > n(Npts, "n");
+  Vector<p3vector<double> > n(Npts, "n");
   for (unsigned int j =0; j<Npts; j++)
     n[j] = dA_dtdp[j] / norm(dA_dtdp[j]);
 
@@ -261,7 +261,7 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<complex<double> > FluxF(NF,"FluxF");
+  Vector<complex<double> > FluxF(NF,"FluxF");
   FluxF = (MF|IF);
 
 

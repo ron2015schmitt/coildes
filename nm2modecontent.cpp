@@ -72,14 +72,14 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
    data.perline(1);
    data.textformat(text_nobraces);
    Matrix <double> data2("data2");
-   LAvector <double> datavec2("datavec2");
+   Vector <double> datavec2("datavec2");
 
    string fname;
 
@@ -87,7 +87,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -105,8 +105,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -114,8 +114,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
 
  
    Matrix<complex<double> > Q(NFR,NFR,"Q");
-   LAvector<complex<double> >  L(NFR,"L");
+   Vector<complex<double> >  L(NFR,"L");
 
    cout<<"$ Load Omega matrix ("<<NFR<<"x"<<NFR<<")"<<endl;
 
@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
 
 
    Matrix<complex<double> > P(NFR,NFR,"P");
-   LAvector<complex<double> >  S(NFR,"S");
+   Vector<complex<double> >  S(NFR,"S");
 
    cout<<"$ Load OmegaN matrix ("<<NFR<<"x"<<NFR<<")"<<endl;
 

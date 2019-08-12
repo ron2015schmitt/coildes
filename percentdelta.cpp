@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -71,8 +71,8 @@ int main (int argc, char *argv[])
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   modevectors(NF,nn,mm,Nnn,Nmm);
 
@@ -80,40 +80,40 @@ int main (int argc, char *argv[])
   // load the plasma surface fourier coef's
 
   cout << "$ Loading PLASMA SURFACE fourier coefficients from " << plasma_filename << endl;
-  LAvector<complex<double> > surf1F(NF,"surf1F");
+  Vector<complex<double> > surf1F(NF,"surf1F");
   if (load_coefs(plasma_filename,CoefFileFormat_sincos,nn,mm,surf1F))
     return 1;
 
 
   cout << "$ Loading PLASMA SURFACE fourier coefficients from " << plasma2_filename << endl;
-  LAvector<complex<double> > surf2F(NF,"surf2F");
+  Vector<complex<double> > surf2F(NF,"surf2F");
   if (load_coefs(plasma2_filename,CoefFileFormat_sincos,nn,mm,surf2F))
     return 1;
 
   //  NEED TO PERFORM THIS IN SIN/COS SPACE because
   // WE OUTPUT IN SIN COS SPACE
 
-  LAvector<complex<double> > diffF(NF,"diffF");
-  LAvector<double> diffFR(NF,"diffFR");
-  LAvector<double> diffFI(NF,"diffFI");
+  Vector<complex<double> > diffF(NF,"diffF");
+  Vector<double> diffFR(NF,"diffFR");
+  Vector<double> diffFI(NF,"diffFI");
   diffF = surf2F-surf1F;
   diffFR = real(diffF);
   diffFI = imag(diffF);
 
   const double TINY = 1e-300;
-  LAvector<double> surf1FR(NF,"surf1FR");
-  LAvector<double> surf1FI(NF,"surf1FI");
+  Vector<double> surf1FR(NF,"surf1FR");
+  Vector<double> surf1FI(NF,"surf1FI");
   surf1FR = real(surf1F);
   surf1FR = surf1FR + TINY;
   surf1FI = imag(surf1F);
   surf1FI = surf1FI + TINY;
 
-  LAvector<double> deltaFR(NF,"deltaFR");
-  LAvector<double> deltaFI(NF,"deltaFI");
+  Vector<double> deltaFR(NF,"deltaFR");
+  Vector<double> deltaFI(NF,"deltaFI");
   deltaFR = diffFR/surf1FR*100;
   deltaFI = diffFI/surf1FI*100;
 
-  LAvector<complex<double> > deltaF(NF,"deltaF");
+  Vector<complex<double> > deltaF(NF,"deltaF");
   deltaF = vcomplex(deltaFR, deltaFI);
 
   cout<<endl;

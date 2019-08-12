@@ -99,7 +99,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -112,7 +112,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -188,13 +188,13 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
    const unsigned int NptsI = NthetaI*NphiI;
-   LAvector<double> thetasI(NptsI,"thetasI");
-   LAvector<double> phisI(NptsI,"phisI");
+   Vector<double> thetasI(NptsI,"thetasI");
+   Vector<double> phisI(NptsI,"phisI");
    anglevectors(thetasI, phisI, NthetaI, NphiI);
 
    // coefficient C is the integration coef for the fourier transform
@@ -206,16 +206,16 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    bool mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnIF("nnIF");
-   LAvector<double> mmIF("mmIF");
+   Vector<double> nnIF("nnIF");
+   Vector<double> mmIF("mmIF");
    unsigned int NIF;
    mode00 = false;
    modevectors(NIF,nnIF,mmIF,NnnIF,NmmIF,Nharm,Mharm,mode00);
@@ -255,7 +255,7 @@ int main (int argc, char *argv[])
 
 
 
-   LAvector<complex<double> > FluxF(NFR,"FluxF");
+   Vector<complex<double> > FluxF(NFR,"FluxF");
 
    cout <<endl<< "$ Loading Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,FluxF,false)) {
@@ -268,15 +268,15 @@ int main (int argc, char *argv[])
 
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
    cout << endl;
    cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -285,7 +285,7 @@ int main (int argc, char *argv[])
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-   LAvector<double> J(Npts, "J");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
    }
@@ -298,15 +298,15 @@ int main (int argc, char *argv[])
   
    // lay coil surface onto grid 
   
-   LAvector<p3vector<double> > Xcoil(NptsI, "Xcoil");
-   LAvector<p3vector<double> > dA_dtdp_coil(NptsI, "dA_dtdp_coil");
+   Vector<p3vector<double> > Xcoil(NptsI, "Xcoil");
+   Vector<p3vector<double> > dA_dtdp_coil(NptsI, "dA_dtdp_coil");
 
-   LAvector<p3vector<double> > dx_dr_coil(NptsI, "dx_dr_coil");
-   LAvector<p3vector<double> > dx_dtheta_coil(NptsI,"dx_dtheta_coil");
-   LAvector<p3vector<double> > dx_dphi_coil(NptsI,"dx_dphi_coil");
-   LAvector<p3vector<double> > grad_r_coil(NptsI,"grad_r_coil");
-   LAvector<p3vector<double> > grad_theta_coil(NptsI,"grad_theta_coil");
-   LAvector<p3vector<double> > grad_phi_coil(NptsI,"grad_phi_coil");
+   Vector<p3vector<double> > dx_dr_coil(NptsI, "dx_dr_coil");
+   Vector<p3vector<double> > dx_dtheta_coil(NptsI,"dx_dtheta_coil");
+   Vector<p3vector<double> > dx_dphi_coil(NptsI,"dx_dphi_coil");
+   Vector<p3vector<double> > grad_r_coil(NptsI,"grad_r_coil");
+   Vector<p3vector<double> > grad_theta_coil(NptsI,"grad_theta_coil");
+   Vector<p3vector<double> > grad_phi_coil(NptsI,"grad_phi_coil");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<NthetaI<<" x "<<NphiI<<" (theta by phi) grid"<<endl;
@@ -379,10 +379,10 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<double> rhorootC(NIF, "rhoroot");
+  Vector<double> rhorootC(NIF, "rhoroot");
   rhomatrix(alpha_theta, alpha_phi, mmIF,  nnIF, rhorootC);
 
-  LAvector<double> rhorootP(NFR, "rhorootP");
+  Vector<double> rhorootP(NFR, "rhorootP");
   rhomatrix(alpha_theta, alpha_phi, mmR,  nnR, rhorootP);
 
   STOPTIME(tbuff,ckstart);
@@ -449,10 +449,10 @@ int main (int argc, char *argv[])
    Matrix<complex<double> > V(NIF,NIF,"V");
    const unsigned int Nmin = min(NFR,NIF);
    disp(Nmin);
-   LAvector<double> S(Nmin);
-   cooll_lapack::svd(MF,U,S,V);
+   Vector<double> S(Nmin);
+   matricks_lapack::svd(MF,U,S,V);
 
-   LAvector<double> Snorm = S/S[0];
+   Vector<double> Snorm = S/S[0];
                                                                                 
    STOPTIME(tbuff,ckstart);
    
@@ -473,7 +473,7 @@ int main (int argc, char *argv[])
 
    unsigned int Nmodes = 0;
 
-   LAvector<double> Sinv(Nmin);
+   Vector<double> Sinv(Nmin);
 
    for(unsigned int k=0; k<Nmin; k++) {
       if (Snorm[k] >= condnum) {
@@ -573,7 +573,7 @@ dispcr(S.size());
 
    STARTTIME(tbuff,ckstart);
 
-   LAvector<complex<double> > IF(NIF,"IF");
+   Vector<complex<double> > IF(NIF,"IF");
    IF = (MFinv|FluxF);
 
    STOPTIME(tbuff,ckstart);

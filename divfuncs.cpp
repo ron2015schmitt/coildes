@@ -69,7 +69,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -77,14 +77,14 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   bool mode00 = true;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -103,24 +103,24 @@ int main (int argc, char *argv[])
   STOPTIME(tbuff,ckstart);
 
   
-  LAvector<complex<double> > Func1F(NF,"Func1F");
+  Vector<complex<double> > Func1F(NF,"Func1F");
 
   cout <<endl<< "$ Loading numerator Function sin/cos fourier coefficients from " << flux_filename << endl;
   if (load_coefs(flux_filename,CoefFileFormat_sincos,nn,mm,Func1F))
     return 3;
 
 
-  LAvector<double> func1(Npts,"func");
+  Vector<double> func1(Npts,"func");
   expandfunction(func1,Func1F,fs);
 
 
-  LAvector<complex<double> > Func2F(NF,"Func2F");
+  Vector<complex<double> > Func2F(NF,"Func2F");
 
   cout <<endl<< "$ Loading denomenator Function sin/cos fourier coefficients from " << flux2_filename << endl;
   if (load_coefs(flux2_filename,CoefFileFormat_sincos,nn,mm,Func2F))
     return 3;
 
-  LAvector<double> func2(Npts,"func");
+  Vector<double> func2(Npts,"func");
   expandfunction(func2,Func2F,fs);
 
 
@@ -130,10 +130,10 @@ int main (int argc, char *argv[])
   transformfunction(func1,Func1F,fs);
   //  massage(func1F,1e-10);
 
-  LAvector<unsigned int> temp = findtrue((nn==0)&&(mm==0));
+  Vector<unsigned int> temp = findtrue((nn==0)&&(mm==0));
 print("index[n=0,m=0] = ");dispcr(temp);
 
-  LAvector <double> datavec(NF,"datavec");
+  Vector <double> datavec(NF,"datavec");
   datavec.perline(1);
   datavec.textformat(text_nobraces);
   string fname("");

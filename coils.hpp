@@ -21,9 +21,9 @@ using namespace std;
 
 
 
-#include "cooll.hpp"
-#include "cooll_lapack.hpp"
-using namespace COOLL;
+#include "matricks.hpp"
+#include "matricks_lapack.hpp"
+using namespace Matricks;
 
 
 
@@ -32,10 +32,10 @@ using namespace COOLL;
 
 class FourierSurface {
 private:
-  LAvector<double> _nn;
-  LAvector<double> _mm;
-  LAvector<double> _RF;
-  LAvector<double> _ZF;
+  Vector<double> _nn;
+  Vector<double> _mm;
+  Vector<double> _RF;
+  Vector<double> _ZF;
 public:
   FourierSurface(void) {
   };
@@ -47,29 +47,29 @@ public:
   };
   ~FourierSurface() {
   };
-  LAvector<double>& nn(void) {
+  Vector<double>& nn(void) {
     return _nn;
   };
-  LAvector<double>& mm(void) {
+  Vector<double>& mm(void) {
     return _mm;
   };
-  LAvector<double>& RF(void) {
+  Vector<double>& RF(void) {
     return _RF;
   };
-  LAvector<double>& ZF(void) {
+  Vector<double>& ZF(void) {
     return _ZF;
    };
 
-  const LAvector<double>& nn(void) const {
+  const Vector<double>& nn(void) const {
     return _nn;
   };
-  const LAvector<double>& mm(void) const {
+  const Vector<double>& mm(void) const {
     return _mm;
   };
-  const LAvector<double>& RF(void) const {
+  const Vector<double>& RF(void) const {
     return _RF;
   };
-  const LAvector<double>& ZF(void) const {
+  const Vector<double>& ZF(void) const {
     return _ZF;
    };
 
@@ -94,43 +94,43 @@ inline double sqr(const double x) { return x*x;}
 
 
 // massage in place--real numbers
-void massage(LAvector<double>& x, const double NEGLECT);
+void massage(Vector<double>& x, const double NEGLECT);
 void massage(Matrix<double>& x, const double NEGLECT);
 
 void massage(FourierSurface& x, const double NEGLECT);
 
 
 // massage in place--complex numbers
-void massage(LAvector<complex<double> >& x, const double NEGLECT);
+void massage(Vector<complex<double> >& x, const double NEGLECT);
 void massage(Matrix<complex<double> >& x, const double NEGLECT);
 
-void massage_absolute(LAvector<complex<double> >& x, const double NEGLECT);
+void massage_absolute(Vector<complex<double> >& x, const double NEGLECT);
 void massage_absolute(Matrix<complex<double> >& x, const double NEGLECT);
 
 
 
 
 
-double gridspacing(const LAvector<p3vector<double> >& XX);
+double gridspacing(const Vector<p3vector<double> >& XX);
 
 
-double coil2plasmaspacing(const LAvector<p3vector<double> >& XX, const LAvector<p3vector<double> >& XXcoil);
+double coil2plasmaspacing(const Vector<p3vector<double> >& XX, const Vector<p3vector<double> >& XXcoil);
 
 
-void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm, const LAvector<double>& v1);
+void printfouriercoefs(const Vector<double>& nn, const Vector<double>& mm, const Vector<double>& v1);
 
-void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm, 
-		       const LAvector<double>&  v1,
-		       const LAvector<double>&  v2,
+void printfouriercoefs(const Vector<double>& nn, const Vector<double>& mm, 
+		       const Vector<double>&  v1,
+		       const Vector<double>&  v2,
 		       const unsigned int precision,
 		       const unsigned int fieldwidth=12);
 
 
-void printfouriercoefs(const LAvector<double>& nn, const LAvector<double>& mm, 
-		       const LAvector<double>&  v1,
-		       const LAvector<double>&  v2,
-		       const LAvector<double>&  v3,
-		       const LAvector<double>&  v4,
+void printfouriercoefs(const Vector<double>& nn, const Vector<double>& mm, 
+		       const Vector<double>&  v1,
+		       const Vector<double>&  v2,
+		       const Vector<double>&  v3,
+		       const Vector<double>&  v4,
 		       const unsigned int fieldwidth=12);
 
 

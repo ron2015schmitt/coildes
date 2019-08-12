@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -79,7 +79,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -87,7 +87,7 @@ int main (int argc, char *argv[])
 
    //////////////////////////////////////
 
-   //   LAvector<complex<double> > v(1);
+   //   Vector<complex<double> > v(1);
    //    "{(5,2)}">>v;
    //    dispcr(v);
 
@@ -97,7 +97,7 @@ int main (int argc, char *argv[])
    //    dispcr(A);
    
    //    Matrix<complex<double> > Ainv(2,2);
-   //    cooll_lapack::inv(A,Ainv);
+   //    matricks_lapack::inv(A,Ainv);
 
    //    dispcr(A);
    //    dispcr(Ainv);
@@ -106,8 +106,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
   
    ostringstream strmtmp1;
@@ -126,8 +126,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -138,8 +138,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -206,15 +206,15 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
    cout << endl;
    cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -222,7 +222,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
-   LAvector<double> J(Npts, "J");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
    }
@@ -236,8 +236,8 @@ int main (int argc, char *argv[])
 
    // lay coil surface onto grid 
   
-   LAvector<p3vector<double> > Xcoil(Npts, "Xcoil");
-   LAvector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
+   Vector<p3vector<double> > Xcoil(Npts, "Xcoil");
+   Vector<p3vector<double> > dA_dtdp_coil(Npts, "dA_dtdp_coil");
 
    cout << endl;
    cout <<"$ Mapping coil surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;

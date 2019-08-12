@@ -1,10 +1,10 @@
 
-#include "cooll.hpp"
+#include "matricks.hpp"
 
 
 
 // bplasma is defined in bfield_plasma_p%.cpp
-void bplasma(const  COOLL::p3vector<double>& X,  COOLL::p3vector<double>& B);
+void bplasma(const  Matricks::p3vector<double>& X,  Matricks::p3vector<double>& B);
 
 
 // defined in bfield_coils.cpp

@@ -4,12 +4,12 @@
 #include <sstream>
 #include <string>
 
-#include "cooll.hpp"
+#include "matricks.hpp"
 #include "coils.hpp"
 #include "bfieldfuncs.hpp"
 
 using namespace std;
-using namespace COOLL;
+using namespace Matricks;
 
 
 
@@ -34,10 +34,10 @@ void bfieldwire(p3vector<double>& B, const p3vector<double>& X, const double I) 
 
 //calculate b field of a straight wire in z direction at position x0,y0
 
-void bfieldwire_general(COOLL::p3vector<double>& B, const COOLL::p3vector<double>& X,const double x0, const double y0, const double I) {
+void bfieldwire_general(Matricks::p3vector<double>& B, const Matricks::p3vector<double>& X,const double x0, const double y0, const double I) {
 
   const double Bo  = mu0/(2.0*PI)*I;
-  const COOLL::p3vector<double> deltaX(X.x()-x0, X.y()-y0, X.z());
+  const Matricks::p3vector<double> deltaX(X.x()-x0, X.y()-y0, X.z());
   const double r = sqrt(sqr(deltaX.x()) + sqr(deltaX.y()));
   const double Bphi = Bo / r;
   

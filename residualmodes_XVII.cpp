@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -96,7 +96,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -114,8 +114,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
    const double dtheta = 2*M_PI/((double)Ntheta);
@@ -135,8 +135,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -144,8 +144,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -162,7 +162,7 @@ int main (int argc, char *argv[])
 
 
 
-   LAvector<complex<double> > FluxF(NFR,"FluxF");
+   Vector<complex<double> > FluxF(NFR,"FluxF");
 
    cout <<endl<< "$ Loading Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,FluxF,false))
@@ -171,7 +171,7 @@ int main (int argc, char *argv[])
 
  
    Matrix<complex<double> > P(NFR,NFR,"V");
-   LAvector<complex<double> >  W(NFR,"W");
+   Vector<complex<double> >  W(NFR,"W");
 
    // if omega filename given, then load omega (EVD form) from files
    if (!omega_filename.empty()) {
@@ -205,7 +205,7 @@ int main (int argc, char *argv[])
       fname = omega_filename + ".WR.out";
       load(datavec,fname);
 
-      LAvector <double> datavec2("datavec2");
+      Vector <double> datavec2("datavec2");
       datavec2.perline(1);
       datavec2.textformat(text_nobraces);
       datavec2.resize(NFR);
@@ -253,15 +253,15 @@ int main (int argc, char *argv[])
 
       // lay plasma surface onto grid 
   
-      LAvector<p3vector<double> > X(Npts, "X");
-      LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+      Vector<p3vector<double> > X(Npts, "X");
+      Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-      LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-      LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-      LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-      LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-      LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-      LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+      Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+      Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+      Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+      Vector<p3vector<double> > grad_r(Npts,"grad_r");
+      Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+      Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
       cout << endl;
       cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -270,7 +270,7 @@ int main (int argc, char *argv[])
 
       expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-      LAvector<double> J(Npts, "J");
+      Vector<double> J(Npts, "J");
       for (unsigned int j =0; j<Npts; j++) {
 	 J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
       }
@@ -287,29 +287,29 @@ int main (int argc, char *argv[])
 
       STARTTIME(tbuff,ckstart);
 
-      LAvector<p3vector<double> > B(Npts, "B");
+      Vector<p3vector<double> > B(Npts, "B");
 
       cout <<endl<< "$ Loading BTOTAL_theta fourier coefficients from " << Bt_filename << endl;
 
-      LAvector<complex<double> > BtF(NF,"BtF");
+      Vector<complex<double> > BtF(NF,"BtF");
       if (load_coefs( Bt_filename,CoefFileFormat_sincos,nn,mm,BtF,false))
 	 return 5;
 
 
       cout <<endl<< "$ Loading BTOTAL_phi fourier coefficients from " << Bp_filename << endl;
-      LAvector<complex<double> > BpF(NF,"BpF");
+      Vector<complex<double> > BpF(NF,"BpF");
       if (load_coefs( Bp_filename,CoefFileFormat_sincos,nn,mm,BpF,false))
 	 return 6;
 
 
-      LAvector<complex<double> > lambdaF(NF,"lambdaF");
+      Vector<complex<double> > lambdaF(NF,"lambdaF");
       cout <<endl<< "$ Loading lambda sin/cos fourier coefficients from " << lambda_filename << endl;
       if (load_coefs(lambda_filename,CoefFileFormat_sincos,nn,mm,lambdaF,false))
 	 return 3;
 
-      LAvector<double> Bt(Npts, "Bt");
+      Vector<double> Bt(Npts, "Bt");
       expandfunction(Bt,BtF,fs);
-      LAvector<double> Bp(Npts, "Bp");
+      Vector<double> Bp(Npts, "Bp");
       expandfunction(Bp,BpF,fs);
 
       for (unsigned int j =0; j<Npts; j++)
@@ -323,8 +323,8 @@ int main (int argc, char *argv[])
       printcr("Find contravariant * J vector components.");
 
       STARTTIME(tbuff,ckstart);
-      LAvector<double> JBt(Npts,"JBt");
-      LAvector<double> JBp(Npts,"JBp");
+      Vector<double> JBt(Npts,"JBt");
+      Vector<double> JBp(Npts,"JBp");
  
       for (unsigned int j =0; j<Npts; j++) {
 	 JBt[j] = J[j] * Bt[j];
@@ -333,9 +333,9 @@ int main (int argc, char *argv[])
       STOPTIME(tbuff,ckstart);
 
 
-      LAvector<complex<double> > JBtF(NF,"JBtF");
+      Vector<complex<double> > JBtF(NF,"JBtF");
       transformfunction(JBt,JBtF,fs);
-      LAvector<complex<double> > JBpF(NF,"JBpF");
+      Vector<complex<double> > JBpF(NF,"JBpF");
       transformfunction(JBp,JBpF,fs);
 
       cout << endl;
@@ -343,7 +343,7 @@ int main (int argc, char *argv[])
      
       STARTTIME(tbuff,ckstart);
      
-      const LAvector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
+      const Vector<unsigned int> tmp = findtrue((nn==0)&&(mm==0));
       const unsigned int ind00 = tmp[0];
 
       dispcr(JBtF[ind00].real());
@@ -379,7 +379,7 @@ int main (int argc, char *argv[])
       STARTTIME(tbuff,ckstart);
 
 
-      cooll_lapack::eigwincsort(Omega,P,W);
+      matricks_lapack::eigwincsort(Omega,P,W);
       Omega.clear();
      
       STOPTIME(tbuff,ckstart);
@@ -418,7 +418,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    Matrix<complex<double> > Pinv(NFR,NFR,"Pinv");
-   cooll_lapack::inv(P,Pinv);
+   matricks_lapack::inv(P,Pinv);
      
    STOPTIME(tbuff,ckstart);
 
@@ -434,21 +434,21 @@ int main (int argc, char *argv[])
      
    STARTTIME(tbuff,ckstart);
 
-   LAvector<complex<double> > FluxMF(NFR,"FluxMF");
+   Vector<complex<double> > FluxMF(NFR,"FluxMF");
    FluxMF = (Pinv|FluxF);
 
    STOPTIME(tbuff,ckstart);
 
-   LAvector<unsigned int> ii_prin(NFR,"ii_prin");
-   LAvector<double> magn_prin(NFR,"magn_prin");
-   LAvector<double> magn_percent_prin(NFR,"magn_percent_prin");
-   LAvector<double> magn_cumpercent_prin(NFR,"magn_cumpercent_prin");
+   Vector<unsigned int> ii_prin(NFR,"ii_prin");
+   Vector<double> magn_prin(NFR,"magn_prin");
+   Vector<double> magn_percent_prin(NFR,"magn_percent_prin");
+   Vector<double> magn_cumpercent_prin(NFR,"magn_cumpercent_prin");
 
    magn_prin = abs(FluxMF);
-   double ss_prin = COOLL::sum(magn_prin*magn_prin);
+   double ss_prin = Matricks::sum(magn_prin*magn_prin);
    ii_prin = sortrevwind(magn_prin);
 
-   LAvector<complex<double> > residualFluxMF(NFR,"residualFluxMF");
+   Vector<complex<double> > residualFluxMF(NFR,"residualFluxMF");
 
    for (unsigned int j =0; j<Nprin; j++) 
       residualFluxMF[ii_prin[j]] = 0;
@@ -468,7 +468,7 @@ int main (int argc, char *argv[])
    /////////////////////////////////   			   
 
    magn_prin = abs(residualFluxMF);
-   ss_prin = COOLL::sum(magn_prin*magn_prin);
+   ss_prin = Matricks::sum(magn_prin*magn_prin);
    ii_prin = sortrevwind(magn_prin);
 
 
@@ -511,22 +511,22 @@ int main (int argc, char *argv[])
    cout<<"$ Multiply residualFluxF in magnetic coords by perturbation eigenvalues"<<endl;
    cout<<"$ This gives predicted surface pertubation"<<endl;
 
-   LAvector<unsigned int> ii_comb(NFR,"ii_comb");
-   LAvector<double> magn_comb(NFR,"magn_comb");
-   LAvector<double> magn_percent_comb(NFR,"magn_percent_comb");
-   LAvector<double> magn_cumpercent_comb(NFR,"magn_cumpercent_comb");
+   Vector<unsigned int> ii_comb(NFR,"ii_comb");
+   Vector<double> magn_comb(NFR,"magn_comb");
+   Vector<double> magn_percent_comb(NFR,"magn_percent_comb");
+   Vector<double> magn_cumpercent_comb(NFR,"magn_cumpercent_comb");
 
      
    STARTTIME(tbuff,ckstart);
 
-   LAvector<complex<double> > residualFluxMpertF(NFR,"residualFluxMpertF");
+   Vector<complex<double> > residualFluxMpertF(NFR,"residualFluxMpertF");
    residualFluxMpertF = residualFluxMF / W;
 
    STOPTIME(tbuff,ckstart);
 
 
    magn_comb = abs(residualFluxMpertF);
-   double ss_comb = COOLL::sum(magn_comb*magn_comb);
+   double ss_comb = Matricks::sum(magn_comb*magn_comb);
    ii_comb = sortrevwind(magn_comb);
    magn_percent_comb = (magn_comb*magn_comb)/ss_comb;
 

@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -76,8 +76,8 @@ int main (int argc, char *argv[])
   dispcr(Mharm);
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   bool mode00 = true;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
   // load the plasma surface fourier coef's
 
   cout << "$ Loading PLASMA SURFACE fourier coefficients from " << plasma_filename << endl;
-  LAvector<complex<double> > surf1F(NF,"surf1F");
+  Vector<complex<double> > surf1F(NF,"surf1F");
   bool giveWarning = false;
   if (load_coefs(plasma_filename,CoefFileFormat_sincos,nn,mm,surf1F,giveWarning))
     return 1;

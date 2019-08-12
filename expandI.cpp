@@ -67,7 +67,7 @@ int main (int argc, char *argv[])
 //  struct tms tbuff;
 //  clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -75,14 +75,14 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nnR("nn");
-  LAvector<double> mmR("mm");
+  Vector<double> nnR("nn");
+  Vector<double> mmR("mm");
   unsigned int NFR;
   bool mode00 = false;
   if ( (Nharm >1) ||(Mharm>1) )
@@ -122,14 +122,14 @@ int main (int argc, char *argv[])
 
 
   cout <<endl<< "$ Loading COIL CURRENT fourier coefficients from " << current_filename << endl;
-  LAvector<complex<double> > IF(NFR,"IF");
+  Vector<complex<double> > IF(NFR,"IF");
   if (load_coefs(current_filename,CoefFileFormat_sincos,nnR,mmR,IF))
     return 3;  
 
 
   if (!current_filename2.empty()){
     cout <<endl<< "$ Loading 2nd set of COIL CURRENT fourier coefficients from " << current_filename2 << endl;
-    LAvector<complex<double> > IF2(NFR,"IF2");
+    Vector<complex<double> > IF2(NFR,"IF2");
     if (load_coefs(current_filename2,CoefFileFormat_sincos,nnR,mmR,IF2))
       return 4;  
     IF=IF+IF2;
@@ -137,12 +137,12 @@ int main (int argc, char *argv[])
   }
 
 
-  LAvector<complex<double> > IF_LHC(NFR,"IF_LHC");
+  Vector<complex<double> > IF_LHC(NFR,"IF_LHC");
   if (load_coefs(current_filename,CoefFileFormat_sincos_RHC2LHC,nnR,mmR,IF_LHC))
     return 4;  
 
   if (!current_filename2.empty()){
-    LAvector<complex<double> > IF2_LHC(NFR,"IF2_LHC");
+    Vector<complex<double> > IF2_LHC(NFR,"IF2_LHC");
     if (load_coefs(current_filename2,CoefFileFormat_sincos_RHC2LHC,nnR,mmR,IF2_LHC))
       return 5;  
     IF_LHC=IF_LHC+IF2_LHC;
@@ -163,16 +163,16 @@ int main (int argc, char *argv[])
 
   // expand current onto theta,phi grid 
 
-  LAvector<double> kappa0(Npts,"kappa0");
-  LAvector<double> kappa(Npts,"kappa");
+  Vector<double> kappa0(Npts,"kappa0");
+  Vector<double> kappa(Npts,"kappa");
 
 //  expandfunction(kappa0,IF,fs);
     mode00 = false;
     ifft2d(kappa0,IF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI),mode00);
 
 
-  LAvector<double> kappa_pol(Npts,"kappa_pol");
-  LAvector<double> kappa_tor(Npts,"kappa_tor");
+  Vector<double> kappa_pol(Npts,"kappa_pol");
+  Vector<double> kappa_tor(Npts,"kappa_tor");
 
 double kappa_RMS =0;
   for (unsigned int i = 0; i<Npts; i++) {

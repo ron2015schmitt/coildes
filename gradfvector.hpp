@@ -11,16 +11,16 @@
  *
  **************************************************************************/
 
-void gradfvector( const LAvector<double>& thetas, const LAvector<double>& phis,
-		  const LAvector<double>& mm, const LAvector<double>& nn, 
-		  const LAvector<p3vector<double> >& grad_theta, 
-		  const LAvector<p3vector<double> >& grad_phi,
+void gradfvector( const Vector<double>& thetas, const Vector<double>& phis,
+		  const Vector<double>& mm, const Vector<double>& nn, 
+		  const Vector<p3vector<double> >& grad_theta, 
+		  const Vector<p3vector<double> >& grad_phi,
 		  Matrix<p3vector<complex<double> > >& grad_f ) ;
 
 
-void gradlambda( const LAvector<double>& thetas, const LAvector<double>& phis,
-		 const LAvector<double>& mm, const LAvector<double>& nn, 
-		 const LAvector<complex<double> > lambdaF,
-		 LAvector<double>& dlambda_dtheta, 
-		 LAvector<double>& dlambda_dphi);
+void gradlambda( const Vector<double>& thetas, const Vector<double>& phis,
+		 const Vector<double>& mm, const Vector<double>& nn, 
+		 const Vector<complex<double> > lambdaF,
+		 Vector<double>& dlambda_dtheta, 
+		 Vector<double>& dlambda_dphi);
 

@@ -71,7 +71,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -79,14 +79,14 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   modevectors(NF,nn,mm,Nnn,Nmm);
 
@@ -106,14 +106,14 @@ int main (int argc, char *argv[])
  
   // lay plasma surface onto grid 
   
-  LAvector<p3vector<double> > X(Npts, "X");
-  LAvector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
-  LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-  LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-  LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-  LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-  LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-  LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+  Vector<p3vector<double> > X(Npts, "X");
+  Vector<p3vector<double> > dAdtdp(Npts, "dAdtdp");
+  Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+  Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+  Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+  Vector<p3vector<double> > grad_r(Npts,"grad_r");
+  Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+  Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
  
   cout << endl;
   cout <<"$ Mapping plasma surface fourier coefficients to "<<Ntheta<<" x "<<Nphi<<" (theta by phi) grid"<<endl;
@@ -133,16 +133,16 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<p3vector<double> > Btotal(Npts, "Btotal");
+  Vector<p3vector<double> > Btotal(Npts, "Btotal");
   for (unsigned int j =0; j<Npts; j++)
     bTotal(X[j], Btotal[j]);
  
-  LAvector<p3vector<double> > Bplasma(Npts, "Bplasma");
+  Vector<p3vector<double> > Bplasma(Npts, "Bplasma");
   for (unsigned int j =0; j<Npts; j++)
     bplasma(X[j], Bplasma[j]);
 
 
-  LAvector<p3vector<double> > Bext(Npts, "Bext");
+  Vector<p3vector<double> > Bext(Npts, "Bext");
   for (unsigned int j =0; j<Npts; j++)
     bext(X[j], Bext[j]);
 
@@ -155,24 +155,24 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<p3vector<double> > n(Npts, "n");
+  Vector<p3vector<double> > n(Npts, "n");
   for (unsigned int j =0; j<Npts; j++)
     n[j] = dAdtdp[j] / norm(dAdtdp[j]);
 
-  LAvector<double> Bn(Npts, "Bn");
+  Vector<double> Bn(Npts, "Bn");
   for (unsigned int j =0; j<Npts; j++)
     Bn[j] = dot(Btotal[j], n[j]);
 
 
-  LAvector<double> Bn_plasma(Npts, "Bn_plasma");
+  Vector<double> Bn_plasma(Npts, "Bn_plasma");
   for (unsigned int j =0; j<Npts; j++)
     Bn_plasma[j] = dot(Bplasma[j], n[j]);
 
-  LAvector<double> Flux_plasma(Npts, "Flux_plasma");
+  Vector<double> Flux_plasma(Npts, "Flux_plasma");
   for (unsigned int j =0; j<Npts; j++)
     Flux_plasma[j] = dot(Bplasma[j], dAdtdp[j]);
 
-  LAvector<double> Bn_ext(Npts, "Bn_ext");
+  Vector<double> Bn_ext(Npts, "Bn_ext");
   for (unsigned int j =0; j<Npts; j++)
     Bn_ext[j] = dot(Bext[j], n[j]);
 
@@ -199,35 +199,35 @@ int main (int argc, char *argv[])
   printcr("Find fourier coef's of magnetic field");
   STARTTIME(tbuff,ckstart);
 
-  LAvector<double> Br(Npts, "Br");
+  Vector<double> Br(Npts, "Br");
   for (unsigned int j =0; j<Npts; j++)
     Br[j] =  dot ( Btotal[j], grad_r[j] );
-  LAvector<complex<double> > BrF(NF,"BrF");
+  Vector<complex<double> > BrF(NF,"BrF");
   transformfunction(Br,BrF,fs);
  
-  LAvector<double> Bt(Npts, "Bt");
+  Vector<double> Bt(Npts, "Bt");
   for (unsigned int j =0; j<Npts; j++)
     Bt[j] =  dot ( Btotal[j], grad_theta[j] );
-  LAvector<complex<double> > BtF(NF,"BtF");
+  Vector<complex<double> > BtF(NF,"BtF");
   transformfunction(Bt,BtF,fs);
 
- LAvector<double> Bp(Npts, "Bp");
+ Vector<double> Bp(Npts, "Bp");
   for (unsigned int j =0; j<Npts; j++)
     Bp[j] =  dot ( Btotal[j], grad_phi[j] );
-  LAvector<complex<double> > BpF(NF,"BpF");
+  Vector<complex<double> > BpF(NF,"BpF");
   transformfunction(Bp,BpF,fs);
 
 
-  LAvector<complex<double> > BnF(NF,"BnF");
+  Vector<complex<double> > BnF(NF,"BnF");
   transformfunction(Bn,BnF,fs);
 
-  LAvector<complex<double> > Bn_plasmaF(NF,"Bn_plasmaF");
+  Vector<complex<double> > Bn_plasmaF(NF,"Bn_plasmaF");
   transformfunction(Bn_plasma,Bn_plasmaF,fs);
 
-  LAvector<complex<double> > Flux_plasmaF(NF,"Flux_plasmaF");
+  Vector<complex<double> > Flux_plasmaF(NF,"Flux_plasmaF");
   transformfunction(Flux_plasma,Flux_plasmaF,fs);
 
-  LAvector<complex<double> > Bn_extF(NF,"Bn_extF");
+  Vector<complex<double> > Bn_extF(NF,"Bn_extF");
   transformfunction(Bn_ext,Bn_extF,fs);
 
 
@@ -255,9 +255,9 @@ int main (int argc, char *argv[])
   save(Bn_plasma,"Flux_negplasma.out");
   Bn_plasma =- Bn_plasma;
 
-  LAvector<double> Bx(Npts, "Bx");
-  LAvector<double> By(Npts, "By");
-  LAvector<double> Bz(Npts, "Bz");
+  Vector<double> Bx(Npts, "Bx");
+  Vector<double> By(Npts, "By");
+  Vector<double> Bz(Npts, "Bz");
 
   for (unsigned int j =0; j<Npts; j++) {
      Bx[j] = Btotal[j].x();

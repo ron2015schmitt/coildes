@@ -59,7 +59,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -72,7 +72,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -80,8 +80,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
 
@@ -96,8 +96,8 @@ int main (int argc, char *argv[])
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -108,8 +108,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -149,13 +149,13 @@ int main (int argc, char *argv[])
 
 
 
-   LAvector<complex<double> > BrF(NFR,"BrF");
+   Vector<complex<double> > BrF(NFR,"BrF");
 
    cout <<endl<< "$ Loading Plasma Br sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,BrF))
       return 3;
 
-   LAvector<double> Br(Npts, "Br");
+   Vector<double> Br(Npts, "Br");
    expandfunction(Br,BrF,fsR);
 
    // load or calculate B field
@@ -166,20 +166,20 @@ int main (int argc, char *argv[])
 
    cout <<endl<< "$ Loading BTOTAL_phi fourier coefficients from " << Bp_filename << endl;
 
-   LAvector<complex<double> > BpF(NF,"BpF");
+   Vector<complex<double> > BpF(NF,"BpF");
    if (load_coefs( Bp_filename,CoefFileFormat_sincos,nn,mm,BpF))
       return 6;
 
-   LAvector<double> Bp(Npts, "Bp");
+   Vector<double> Bp(Npts, "Bp");
    expandfunction(Bp,BpF,fs);
 
    STOPTIME(tbuff,ckstart);
 
 
-   LAvector<double> Bw(Npts, "Bw");
+   Vector<double> Bw(Npts, "Bw");
    Bw = Br / Bp;
 
-   LAvector<complex<double> > BwF(NFR,"BwF");
+   Vector<complex<double> > BwF(NFR,"BwF");
    transformfunction(Bw,BwF,fsR);
 
   datavec = real(BwF);
@@ -220,9 +220,9 @@ int main (int argc, char *argv[])
 
    Matrix<complex<double> > Pinv(NFR,NFR,"Pinv");
 
-   cooll_lapack::inv(P,Pinv);
+   matricks_lapack::inv(P,Pinv);
 
-   LAvector<complex<double> > Bw_projF(NFR,"Bw_projF");
+   Vector<complex<double> > Bw_projF(NFR,"Bw_projF");
    Bw_projF = (Pinv|BwF);
 
 
@@ -238,8 +238,8 @@ int main (int argc, char *argv[])
   save(datavec,fname);
 
 
-  LAvector<unsigned int> ii;
-  LAvector<double> magn = abs(Bw_projF);
+  Vector<unsigned int> ii;
+  Vector<double> magn = abs(Bw_projF);
   ii = sortrevwind(magn);
 
 
@@ -249,8 +249,8 @@ int main (int argc, char *argv[])
    ii.textformat(text_nobraces);
    save(ii,fname);
 
-  LAvector<double> mmRsorted(NFR,"mmRsorted");
-  LAvector<double> nnRsorted(NFR,"nnRsorted");
+  Vector<double> mmRsorted(NFR,"mmRsorted");
+  Vector<double> nnRsorted(NFR,"nnRsorted");
 
   Bw_projF = Bw_projF[ii];
 
@@ -288,7 +288,7 @@ int main (int argc, char *argv[])
    nnRsorted.textformat(text_nobraces);
    save(nnRsorted,fname);
 
-   LAvector<double> EV(NFR,"EV");
+   Vector<double> EV(NFR,"EV");
    fname = "omegaNormd.Nn="+Nnn_str+".Nm="+Nmm_str+".EV.out";
    dispcr(fname);
    EV.perline(1);

@@ -23,10 +23,10 @@
 // Dvector
 // You can use a specific math library or just use STL classes
 
-#include "cooll.hpp"
-using namespace COOLL;
+#include "matricks.hpp"
+using namespace Matricks;
 
-typedef LAvector<double> Dvector;
+typedef Vector<double> Dvector;
 
 typedef Matrix<double> Dmatrix;
 /////////////////////////////////////

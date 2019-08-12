@@ -92,7 +92,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -106,7 +106,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -160,14 +160,14 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -178,8 +178,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    if ( (Nharm >1) ||(Mharm>1) )
@@ -223,7 +223,7 @@ int main (int argc, char *argv[])
    // load the plasma flux fourier coef's
    // WE CAN IGNORE THE (m=0,n=0) mode because the omega matrix is identically zero
    // for (m=0,n=0) (both in row and column index)
-   LAvector<complex<double> > delFluxF(NFR,"FluxF");
+   Vector<complex<double> > delFluxF(NFR,"FluxF");
    cout <<endl<< "$ Loading perturbed Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,delFluxF))
       return 3;
@@ -231,15 +231,15 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
     
 
@@ -249,7 +249,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
-   LAvector<double> J(Npts, "J");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
    }
@@ -263,7 +263,7 @@ int main (int argc, char *argv[])
    double iota = iota_given;
 
    
-   LAvector<double>  W0(NFR,"W0");
+   Vector<double>  W0(NFR,"W0");
    const double coef1 = fluxshear_given/ (2.0*PI);
    for (unsigned int j =0; j<NFR; j++) {
       W0[j] = (coef1)*(nnR[j] + iota*mmR[j]);
@@ -277,7 +277,7 @@ int main (int argc, char *argv[])
 
    if ( omega_filename.empty() ) {
 
-      LAvector<complex<double> > lambdaF(NFR,"lambdaF");
+      Vector<complex<double> > lambdaF(NFR,"lambdaF");
 
       cout <<endl<< "$ Loading lambda sin/cos fourier coefficients from " << lambda_filename << endl;
       if (load_coefs(lambda_filename,CoefFileFormat_sincos,nnR,mmR,lambdaF,false)){
@@ -290,7 +290,7 @@ int main (int argc, char *argv[])
       
       STARTTIME(tbuff,ckstart);
 
-      LAvector<double> lambda(Npts, "lambda");
+      Vector<double> lambda(Npts, "lambda");
       //      expandfunction(lambda,lambdaF,fsR);
       mode00=false;
       ifft2d(lambda,lambdaF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI),mode00);
@@ -311,14 +311,14 @@ int main (int argc, char *argv[])
       data.textformat(text_nobraces);
       fname = "PF."+omega_filename +".R.out";
       dispcr(fname);
-      COOLL::load(data,fname);
+      Matricks::load(data,fname);
 
       data2.resize(NFR,NFR);
       data2.perline(1);
       data2.textformat(text_nobraces);
       fname = "PF."+omega_filename +".I.out";
       dispcr(fname);
-      COOLL::load(data2,fname);
+      Matricks::load(data2,fname);
 
       P = mcomplex(data,data2);
       data.clear();
@@ -337,7 +337,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    Matrix<complex<double> > Pinv(NFR,NFR,"Pinv");
-   cooll_lapack::inv(P,Pinv);
+   matricks_lapack::inv(P,Pinv);
      
    STOPTIME(tbuff,ckstart);
 
@@ -373,10 +373,10 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
 
-   LAvector<complex<double> > deltaF(NFR,"deltaF");
+   Vector<complex<double> > deltaF(NFR,"deltaF");
    deltaF = (OmegaInv|(delFluxF));
 
-   LAvector<double> delta(Npts,"delta");
+   Vector<double> delta(Npts,"delta");
    mode00=false;
    ifft2d(delta,deltaF,Nphi,Ntheta,Nnn,Nmm,Nharm,Mharm,1e-10,1/(2*PI),mode00);
   
@@ -390,8 +390,8 @@ int main (int argc, char *argv[])
 
    STARTTIME(tbuff,ckstart);
 
-   LAvector<p3vector<double> > ksi(Npts,"ksi");
-   LAvector<p3vector<double> > Xnew(Npts,"Xnew");
+   Vector<p3vector<double> > ksi(Npts,"ksi");
+   Vector<p3vector<double> > Xnew(Npts,"Xnew");
    for(unsigned int i=0; i<Npts;i++) {
       ksi[i] = delta[i] * dx_dr[i];
       Xnew[i] = X[i] + ksi[i];

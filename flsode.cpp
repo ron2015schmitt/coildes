@@ -1,12 +1,12 @@
 #include "flsode.hpp"
-#include "cooll.hpp"
+#include "matricks.hpp"
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
 
 // assumes bTotal(X,B) function exists somewhere. bTotal calculates the
 // desired B field at the given coord (X).
-extern void bTotal(const COOLL::p3vector<double>& X, COOLL::p3vector<double>& B);
+extern void bTotal(const Matricks::p3vector<double>& X, Matricks::p3vector<double>& B);
 
 
 inline int dummy(const int a)
@@ -17,7 +17,7 @@ inline int dummy(const int a)
 void flsode(const int &neq, const double &t, const double y[], double dy_dt[])
 {
 
-  using namespace COOLL;
+  using namespace Matricks;
   using namespace std;
   dummy(neq);
   const double & phi = t;
@@ -55,7 +55,7 @@ void flsode_details(const int &neq, const double &t, const double y[], double dy
 		    double& x0, double& y0, double& z0,
 		    double& Bx0, double& By0, double& Bz0,
 		    double& Br0, double& Bphi0) {
-  using namespace COOLL;
+  using namespace Matricks;
   using namespace std;
 
   const double & phi = t;

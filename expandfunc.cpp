@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
   struct tms tbuff;
   clock_t ckstart;
 
-  // display COOLL mode
+  // display Matricks mode
   cout << endl;
   display_execution_mode();
   cout << endl;
@@ -71,8 +71,8 @@ int main (int argc, char *argv[])
 
   // Create angle grid
   const unsigned int Npts = Ntheta*Nphi;
-  LAvector<double> thetas(Npts,"thetas");
-  LAvector<double> phis(Npts,"phis");
+  Vector<double> thetas(Npts,"thetas");
+  Vector<double> phis(Npts,"phis");
   anglevectors(thetas, phis, Ntheta, Nphi);
 
 
@@ -108,8 +108,8 @@ int main (int argc, char *argv[])
 
 
   // Create Fourier Mode vectors
-  LAvector<double> nn("nn");
-  LAvector<double> mm("mm");
+  Vector<double> nn("nn");
+  Vector<double> mm("mm");
   unsigned int NF;
   bool mode00 = true;
   modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -125,7 +125,7 @@ int main (int argc, char *argv[])
   STOPTIME(tbuff,ckstart);
 
   
-  LAvector<complex<double> > FuncF(NF,"FuncF");
+  Vector<complex<double> > FuncF(NF,"FuncF");
 
   cout <<endl<< "$ Loading Function sin/cos fourier coefficients from " << flux_filename << endl;
   if (load_coefs(flux_filename,CoefFileFormat_sincos,nn,mm,FuncF))
@@ -133,12 +133,12 @@ int main (int argc, char *argv[])
 
 
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
 
 
-  LAvector<double> func(Npts,"func");
+  Vector<double> func(Npts,"func");
   expandfunction(func,FuncF,fs);
 
 

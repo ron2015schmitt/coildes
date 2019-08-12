@@ -55,7 +55,7 @@ int main (int argc, char *argv[])
   //  ios_base::fmtflags flags = ios_base::right | ios_base::scientific;
   p3vectorformat::textformat(text_braces);
 
-  LAvector <double> datavec("datavec");
+  Vector <double> datavec("datavec");
   datavec.textformat(text_braces);
 
   string fname;

@@ -79,7 +79,7 @@ int main (int argc, char *argv[])
    string ftemp;
    p3vectorformat::textformat(text_nobraces);
 
-   LAvector <double> datavec("datavec");
+   Vector <double> datavec("datavec");
    datavec.perline(1);
    datavec.textformat(text_nobraces);
    Matrix <double> data("data");
@@ -92,7 +92,7 @@ int main (int argc, char *argv[])
    struct tms tbuff;
    clock_t ckstart;
 
-   // display COOLL mode
+   // display Matricks mode
    cout << endl;
    display_execution_mode();
    cout << endl;
@@ -100,8 +100,8 @@ int main (int argc, char *argv[])
 
    // Create angle grid
    const unsigned int Npts = Ntheta*Nphi;
-   LAvector<double> thetas(Npts,"thetas");
-   LAvector<double> phis(Npts,"phis");
+   Vector<double> thetas(Npts,"thetas");
+   Vector<double> phis(Npts,"phis");
    anglevectors(thetas, phis, Ntheta, Nphi);
 
 
@@ -114,8 +114,8 @@ int main (int argc, char *argv[])
    string Nmm_str(strmtmp2.str());
 
    // Create Fourier Mode vectors
-   LAvector<double> nn("nn");
-   LAvector<double> mm("mm");
+   Vector<double> nn("nn");
+   Vector<double> mm("mm");
    unsigned int NF;
    bool mode00 = true;
    modevectors(NF,nn,mm,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -123,8 +123,8 @@ int main (int argc, char *argv[])
 
 
    // these exclude the n=0,m=0 case
-   LAvector<double> nnR("nnR");
-   LAvector<double> mmR("mmR");
+   Vector<double> nnR("nnR");
+   Vector<double> mmR("mmR");
    unsigned int NFR;
    mode00 = false;
    modevectors(NFR,nnR,mmR,Nnn,Nmm,Nharm,Mharm,mode00);
@@ -182,7 +182,7 @@ int main (int argc, char *argv[])
 
 
    // load the plasma flux fourier coef's
-   LAvector<complex<double> > delFluxF(NFR,"delFluxF");
+   Vector<complex<double> > delFluxF(NFR,"delFluxF");
    cout <<endl<< "$ Loading perturbed Plasma Flux sin/cos fourier coefficients from " << flux_filename << endl;
    if (load_coefs(flux_filename,CoefFileFormat_sincos,nnR,mmR,delFluxF,false))
       return 3;
@@ -195,15 +195,15 @@ int main (int argc, char *argv[])
  
    // lay plasma surface onto grid 
   
-   LAvector<p3vector<double> > X(Npts, "X");
-   LAvector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
+   Vector<p3vector<double> > X(Npts, "X");
+   Vector<p3vector<double> > dA_dtdp(Npts, "dA_dtdp");
 
-   LAvector<p3vector<double> > dx_dr(Npts, "dx_dr");
-   LAvector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
-   LAvector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
-   LAvector<p3vector<double> > grad_r(Npts,"grad_r");
-   LAvector<p3vector<double> > grad_theta(Npts,"grad_theta");
-   LAvector<p3vector<double> > grad_phi(Npts,"grad_phi");
+   Vector<p3vector<double> > dx_dr(Npts, "dx_dr");
+   Vector<p3vector<double> > dx_dtheta(Npts,"dx_dtheta");
+   Vector<p3vector<double> > dx_dphi(Npts,"dx_dphi");
+   Vector<p3vector<double> > grad_r(Npts,"grad_r");
+   Vector<p3vector<double> > grad_theta(Npts,"grad_theta");
+   Vector<p3vector<double> > grad_phi(Npts,"grad_phi");
 
     
 
@@ -214,7 +214,7 @@ int main (int argc, char *argv[])
 
    expandsurfaceandbases(X,dA_dtdp,dx_dr,dx_dtheta,dx_dphi,grad_r,grad_theta,grad_phi,plasmafourier,thetas,phis);
 
-   LAvector<double> J(Npts, "J");
+   Vector<double> J(Npts, "J");
    for (unsigned int j =0; j<Npts; j++) {
       J[j] = dot(dx_dr[j],cross(dx_dtheta[j], dx_dphi[j]));
    }
@@ -230,21 +230,21 @@ int main (int argc, char *argv[])
 
   STARTTIME(tbuff,ckstart);
 
-  LAvector<p3vector<double> > B(Npts, "B");
+  Vector<p3vector<double> > B(Npts, "B");
 
   cout <<endl<< "$ Loading BTOTAL_theta fourier coefficients from " << Bt_filename << endl;
   cout <<endl<< "$ Loading BTOTAL_phi fourier coefficients from " << Bp_filename << endl;
 
-  LAvector<complex<double> > BtF(NF,"BtF");
+  Vector<complex<double> > BtF(NF,"BtF");
   if (load_coefs( Bt_filename,CoefFileFormat_sincos,nn,mm,BtF))
     return 5;
-  LAvector<complex<double> > BpF(NF,"BpF");
+  Vector<complex<double> > BpF(NF,"BpF");
   if (load_coefs( Bp_filename,CoefFileFormat_sincos,nn,mm,BpF))
     return 6;
 
-  LAvector<double> Bt(Npts, "Bt");
+  Vector<double> Bt(Npts, "Bt");
   expandfunction(Bt,BtF,fs);
-  LAvector<double>Bp(Npts, "Bp");
+  Vector<double>Bp(Npts, "Bp");
   expandfunction(Bp,BpF,fs);
   
   for (unsigned int j =0; j<Npts; j++)
@@ -283,7 +283,7 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
    Matrix<complex<double> > OmegaInv(NFR,NFR,"OmegaInv");
-   cooll_lapack::inv(Omega,OmegaInv);
+   matricks_lapack::inv(Omega,OmegaInv);
     
    STOPTIME(tbuff,ckstart);
 
@@ -293,7 +293,7 @@ int main (int argc, char *argv[])
    cout << endl;
    cout<<"$ Calculate weighted flux"<<endl;
 
-   LAvector<double> delFlux(Npts, "delFlux");
+   Vector<double> delFlux(Npts, "delFlux");
    expandfunction(delFlux,delFluxF,fsR);
 
    for(unsigned int i=0; i<Npts;i++) {
@@ -314,9 +314,9 @@ int main (int argc, char *argv[])
    STARTTIME(tbuff,ckstart);
 
 
-   LAvector<complex<double> > deltaF(NFR,"deltaF");
+   Vector<complex<double> > deltaF(NFR,"deltaF");
    deltaF = (OmegaInv|(delFluxF));
-   LAvector<double> delta(Npts,"delta");
+   Vector<double> delta(Npts,"delta");
    expandfunction(delta,deltaF,fsR);
 
 
@@ -331,8 +331,8 @@ int main (int argc, char *argv[])
 
    STARTTIME(tbuff,ckstart);
 
-   LAvector<p3vector<double> > ksi(Npts,"ksi");
-   LAvector<p3vector<double> > Xnew(Npts,"Xnew");
+   Vector<p3vector<double> > ksi(Npts,"ksi");
+   Vector<p3vector<double> > Xnew(Npts,"Xnew");
    for(unsigned int i=0; i<Npts;i++) {
       ksi[i] = delta[i] * dx_dr[i];
       Xnew[i] = X[i] + ksi[i];
