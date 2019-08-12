@@ -18,7 +18,7 @@ sudo apt update
 ```
 
 
-### Fortran compiler
+### GNU Fortran compiler: gfortran
 
 Install the GNU Fortran compiler [gfortran](https://en.wikipedia.org/wiki/GNU_Fortran)
 
@@ -26,7 +26,7 @@ Install the GNU Fortran compiler [gfortran](https://en.wikipedia.org/wiki/GNU_Fo
 sudo apt install gfortran
 ```
 
-### Numerical packages BLAS and LAPACK
+### Numerical packages: BLAS and LAPACK
 
 Install [BLAS](https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms), [LAPACK](https://en.wikipedia.org/wiki/LAPACK), as well as [LAPACKE](https://www.netlib.org/lapack/lapacke.html).
 
@@ -38,7 +38,7 @@ sudo apt install libopenblas-dev
 sudo apt install liblapacke-dev
 ```
 
-### Fourier Transform Package FFTW
+### Fourier Transform Package: FFTW
 
 Install [FFTW](https://en.wikipedia.org/wiki/FFTW).
 
@@ -46,25 +46,19 @@ Install [FFTW](https://en.wikipedia.org/wiki/FFTW).
 sudo apt install libfftw3-dev libfftw3-doc
 ```
 
-### mātricks library
+### Linear Algebra Library: mātricks
 
 The [mātricks](https://github.com/ron2015schmitt/matricks) linear algebra library is used throughout the code.
 
 The mātricks library is included as a submodule and is automatically built by the Makefile.
 
-If you would like to build it manually, exevute the following
-
-```
-cd matricks
-./configure
-cd ..
-```
-
-### ODEPACK
+### ODE Library: ODEPACK
 
 The package [ODEPACK](https://computing.llnl.gov/casc/odepack/) is used to follow the field lines of the magnetic field configuration.
 
-A [ODEPACK library mirror](https://github.com/jacobwilliams/odepack) is included as a submodule.
+The only uses the function DLSODE.
+
+The [ODEPACK library mirror from Jacob Williams](https://github.com/jacobwilliams/odepack) is included as a submodule, and is automatically built by the Makefile.
 
 
 
