@@ -46,11 +46,11 @@ Install [FFTW](https://en.wikipedia.org/wiki/FFTW).
 sudo apt install libfftw3-dev libfftw3-doc
 ```
 
-## matricks library
+### mātricks library
 
-The [matricks](https://github.com/ron2015schmitt/matricks) linear algebra library is used throughout the code.
+The [mātricks](https://github.com/ron2015schmitt/matricks) linear algebra library is used throughout the code.
 
-The matricks library is included as a submodule.
+The mātricks library is included as a submodule.
 
 ```
 cd matricks
