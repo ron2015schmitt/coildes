@@ -26,6 +26,7 @@ opam init
 opam depext odepack.0.6.8
 opam install odepack
 ```
+The library to link is ```~/.opam/system/lib/odepack/odepack.a```
 
 ## matricks library
 
