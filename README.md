@@ -12,6 +12,10 @@ Stellarator Coil Design Thesis Code
 ### A Fortran compiler
 Ane of these fortran compilers: gfortran, g95, g77, f77
 
+```
+sudo apt-get install gfortran
+```
+
 ### OPAM
 ```
 sudo apt install opam
