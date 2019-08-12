@@ -8,7 +8,7 @@ The commands below are given for Ubuntu.  They have been verified using Ubuntu 1
 
 ### Fortran compiler
 
-The first step is to install the [GNU Fortran compiler gfortran](https://gcc.gnu.org/wiki/GFortran)
+The first step is to install the GNU Fortran compiler [gfortran](https://gcc.gnu.org/wiki/GFortran)
 
 ```
 sudo apt-get install gfortran
