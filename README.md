@@ -4,13 +4,11 @@ Stellarator Coil Design Thesis Code
 
 ## Installation Requirements
 
+The commands below are given for Ubuntu.  They have been verified using Ubuntu 18.04.
 
-## The LSODE solver library from ODEPACK
+### Fortran compiler
 
-[ODEPACK](https://computing.llnl.gov/casc/odepack/)
-
-### A Fortran compiler
-Ane of these fortran compilers: gfortran, g95, g77, f77
+The first step is to install the [GNU Fortran compiler gfortran](https://gcc.gnu.org/wiki/GFortran)
 
 ```
 sudo apt-get install gfortran
@@ -27,6 +25,8 @@ opam depext odepack.0.6.8
 opam install odepack
 ```
 The library to link is ```~/.opam/system/lib/odepack/odepack.a```
+[ODEPACK](https://computing.llnl.gov/casc/odepack/)
+
 
 ## matricks library
 
