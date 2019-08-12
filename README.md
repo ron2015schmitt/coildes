@@ -20,7 +20,7 @@ sudo apt update
 
 ### Fortran compiler
 
-The first step is to install the GNU Fortran compiler [gfortran](https://en.wikipedia.org/wiki/GNU_Fortran)
+Install the GNU Fortran compiler [gfortran](https://en.wikipedia.org/wiki/GNU_Fortran)
 
 ```
 sudo apt install gfortran
@@ -28,7 +28,7 @@ sudo apt install gfortran
 
 ### Numerical packages BLAS and LAPACK
 
-The following installs [BLAS](https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms), [LAPACK](https://en.wikipedia.org/wiki/LAPACK), as well as [LAPACKE](https://www.netlib.org/lapack/lapacke.html).
+Install [BLAS](https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms), [LAPACK](https://en.wikipedia.org/wiki/LAPACK), as well as [LAPACKE](https://www.netlib.org/lapack/lapacke.html).
 
 ```
 sudo apt install liblapack3
@@ -40,7 +40,7 @@ sudo apt install liblapacke-dev
 
 ### Fourier Transform Package FFTW
 
-The following installs [FFTW](https://en.wikipedia.org/wiki/FFTW).
+Install [FFTW](https://en.wikipedia.org/wiki/FFTW).
 
 ```
 sudo apt install libfftw3-dev libfftw3-doc
