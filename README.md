@@ -48,6 +48,8 @@ sudo apt install libfftw3-dev libfftw3-doc
 
 ## matricks library
 
+The [matricks](https://github.com/ron2015schmitt/matricks) linear algebra library is used throughout the code.
+
 The matricks library is included as a submodule.
 
 ```
@@ -59,7 +61,6 @@ cd ..
 ### ODEPACK
 
 The package [ODEPACK](https://computing.llnl.gov/casc/odepack/) is used to follow the field lines of the magnetic field configuration.
-
 
 A [ODEPACK library mirror](https://github.com/jacobwilliams/odepack) is included as a submodule.
 
