@@ -7,7 +7,7 @@
 [Stellarator](https://en.wikipedia.org/wiki/Stellarator) Coil Design Thesis Code
 
 
-## Installation Requirements
+## Installation 
 
 The commands below are given for [Ubuntu Linux](https://en.wikipedia.org/wiki/Ubuntu).  They have been verified using Ubuntu 18.04.
 
