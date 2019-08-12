@@ -46,19 +46,23 @@ Install [FFTW](https://en.wikipedia.org/wiki/FFTW).
 sudo apt install libfftw3-dev libfftw3-doc
 ```
 
-### OPAM
-```
-sudo apt install opam
-opam init
-```
-### ODEPACK
-```
-opam depext odepack.0.6.8
-opam install odepack
-```
-The library to link is ```~/.opam/system/lib/odepack/odepack.a```
-[ODEPACK](https://computing.llnl.gov/casc/odepack/)
-
-
 ## matricks library
+
+The matricks library is included as a submodule.
+
+```
+cd matricks
+./configure
+cd ..
+```
+
+### ODEPACK
+
+The package [ODEPACK](https://computing.llnl.gov/casc/odepack/) is used to follow the field lines of the magnetic field configuration.
+
+
+A [ODEPACK library mirror](https://github.com/jacobwilliams/odepack) is included as a submodule.
+
+
+
 
