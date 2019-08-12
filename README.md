@@ -23,6 +23,7 @@ opam init
 ```
 ### ODEPACK
 ```
+opam depext odepack.0.6.8
 opam install odepack
 ```
 
