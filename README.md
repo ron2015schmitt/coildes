@@ -1,4 +1,9 @@
 # coildes
+
+```diff
+- CURRENTLY NOT READY FOR USE. CHECK BACK IN SEPTEMBER 2019 -
+```
+
 Stellarator Coil Design Thesis Code
 
 
