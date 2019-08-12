@@ -1,0 +1,3 @@
+[submodule "matricks"]
+	path = matricks
+	url = https://github.com/ron2015schmitt/matricks.git
