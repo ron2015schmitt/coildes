@@ -50,7 +50,9 @@ sudo apt install libfftw3-dev libfftw3-doc
 
 The [mātricks](https://github.com/ron2015schmitt/matricks) linear algebra library is used throughout the code.
 
-The mātricks library is included as a submodule.
+The mātricks library is included as a submodule and is automatically built by the Makefile.
+
+If you would like to build it manually, exevute the following
 
 ```
 cd matricks
