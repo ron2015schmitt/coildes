@@ -3,26 +3,37 @@
 SHELL=/bin/bash
 
 
+NAME_MATRICKS = matricks
 DIR_MATRICKS = ./matricks
 INC_MATRICKS = -I $(DIR_MATRICKS) 
-LIB_MATRICKS = -L$(DIR_MATRICKS) -lmatricks
-LIBFILE_MATRICKS = $(DIR_MATRICKS)/libmatricks.a
+LIB_MATRICKS = -L$(DIR_MATRICKS) -l$(NAME_MATRICKS)
+LIBFILE_MATRICKS = $(DIR_MATRICKS)/lib$(NAME_MATRICKS).a
 
 
-INCLUDES = $(INC_MATRICKS)
-LIBS =  $(LIB_MATRICKS) 
+NAME_ODEPACK = odepack
+DIR_ODEPACK = ./odepack/src
+INC_ODEPACK = -I $(DIR_ODEPACK) 
+LIB_ODEPACK = -L$(DIR_ODEPACK) -l$(NAME_ODEPACK)
+LIBFILE_ODEPACK = $(DIR_ODEPACK)/lib$(NAME_ODEPACK).a
+FILE_DEMO_LSODE = $(DIR_ODEPACK)/demos/LSODE.o
+
+
+
+INCLUDES = $(INC_MATRICKS) $(INC_ODEPACK)
+LIBS =  $(LIB_MATRICKS) $(LIB_ODEPACK)
 
 
 
 
 # C++ compiler
-CPPOPT = 
+CPPOPT = -finline-functions -finline-limit=750 -O1
 CPPC = g++
 CPPFLAGS = $(CPPOPT) $(INCLUDES)
 
 # linker
 LNKOPT =
-LDFLAGS = $(LNKOPT)  
+LDFLAGS = $(LNKOPT)
+LNKOPT_FORTRAN = -lgfortran
 LNK = g++
 
 # FORTRAN COMPILER
@@ -99,6 +110,13 @@ def:
 
 $(LIBFILE_MATRICKS):
 	cd matricks && ./configure
+
+$(LIBFILE_ODEPACK):  $(DIR_ODEPACK)/opkda1.o  $(DIR_ODEPACK)/opkda2.o  $(DIR_ODEPACK)/opkdmain.o  
+	@echo "building ODEPACK library..."
+	cd $(DIR_ODEPACK) && ar rUuv libodepack.a $(^F)
+
+%.o: %.f
+	$(FC) -c $*.f -o $*.o
 
 
 %.o: %.cpp coils.hpp $(LIBFILE_MATRICKS)
@@ -331,16 +349,16 @@ scoild_fft_XV: scoild_fft_XV.o coils.o coilio.o coils_cmdline.o surface.o induct
 
 # These codes require the use of FORTRAN FIELD LINE CODE
 
-calcBtraj_%:  bfield_plasma_%.o bfield_ext_%.o bfield_ext.o calcBtraj.o coils.o coilio.o coils_cmdline.o surface.o bfieldfuncs.o calcPoincare.o flsode.o
+calcBtraj_%:  bfield_plasma_%.o bfield_ext_%.o bfield_ext.o calcBtraj.o coils.o coilio.o coils_cmdline.o surface.o bfieldfuncs.o calcPoincare.o $(LIBFILE_ODEPACK)
 	$(LNK) $(LDFLAGS) $^ -o $@  $(LIBS_C) $(LIBS_FIELD)
 
-calcBtrajfromCoils_%: bfield_plasma_%.o bfield_coils.o calcBtrajfromCoils.o coils.o coilio.o coils_cmdline.o surface.o bfieldfuncs.o calcPoincare.o flsode.o 
+calcBtrajfromCoils_%: bfield_plasma_%.o bfield_coils.o calcBtrajfromCoils.o coils.o coilio.o coils_cmdline.o surface.o bfieldfuncs.o calcPoincare.o $(LIBFILE_ODEPACK)
 	$(LNK) $(LDFLAGS) $^ -o $@  $(LIBS_C) $(LIBS_FIELD)
 
 
 #temp executable for trying stuff out
-temp: temp.o coils.o coilio.o coils_cmdline.o surface.o 
-	$(LNK) $(LDFLAGS) $^ -o $@ $(LIBS_C)
+test_odepack: test_odepack.o  $(LIBFILE_ODEPACK)
+	$(LNK) $(LDFLAGS) $^ -o $@ $(LIBS_C) $(LNKOPT_FORTRAN)
 
 
 
