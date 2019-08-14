@@ -1,0 +1,32 @@
+#!/bin/bash
+
+echo " "
+echo "configuring coildes ..."              
+mkdir -p bin
+mkdir -p lib
+
+COILDES_DIR=`pwd`
+COILDES_BIN=${COILDES_DIR}/bin
+echo " "
+
+echo "COILDES_DIR = ${COILDES_DIR}"
+
+DIR_ODEPACK=${COILDES_DIR}/odepack/src
+cp Makefile ${DIR_ODEPACK}
+
+echo " "
+echo "Add the following line to your profile, eg ~/.profile"
+echo "PATH=\"${COILDES_BIN}:\$PATH\""
+
+echo " "
+echo "Then source your profile "
+echo "source ~/.profile"
+echo " "
+echo "done."              
+
+
+
+
+
+
+

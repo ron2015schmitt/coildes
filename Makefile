@@ -1,17 +1,30 @@
 
 
-SHELL=/bin/bash
+
+SHELL:=/bin/bash
+RED:='\033[0;31m'
+NC:='\033[0m' # No Color
+BOLDON:='\e[1m'
+BOLDOFF:='\e[0m'
+
+
+
+# this resides in the bin subdirectory
+COILDES_DIR:=$(shell coildesdir)
+ifndef COILDES_DIR
+$(error PATH is not set properly. Refer to coildes configuration instructions.)
+endif
 
 
 NAME_MATRICKS = matricks
-DIR_MATRICKS = ./matricks
+DIR_MATRICKS = $(COILDES_DIR)/matricks
 INC_MATRICKS = -I $(DIR_MATRICKS) 
 LIB_MATRICKS = -L$(DIR_MATRICKS) -l$(NAME_MATRICKS)
 LIBFILE_MATRICKS = $(DIR_MATRICKS)/lib$(NAME_MATRICKS).a
 
 
 NAME_ODEPACK = odepack
-DIR_ODEPACK = ./odepack/src
+DIR_ODEPACK = $(COILDES_DIR)/odepack/src
 INC_ODEPACK = -I $(DIR_ODEPACK) 
 LIB_ODEPACK = -L$(DIR_ODEPACK) -l$(NAME_ODEPACK)
 LIBFILE_ODEPACK = $(DIR_ODEPACK)/lib$(NAME_ODEPACK).a
@@ -23,10 +36,8 @@ INCLUDES = $(INC_MATRICKS) $(INC_ODEPACK)
 LIBS =  $(LIB_MATRICKS) $(LIB_ODEPACK)
 
 
-
-
 # C++ compiler
-CPPOPT = -finline-functions -finline-limit=750 -O1
+CPPOPT = -finline-functions -finline-limit=750 -O0
 CPPC = g++
 CPPFLAGS = $(CPPOPT) $(INCLUDES)
 
@@ -41,31 +52,13 @@ FC = gfortran
 
 
 
-#notes:  -v option on g++/gcc is useful for 
-# use this variable to set gcc/g++ compile options from command line
-# just write 'CLOPTS=yada yada yada' at end of command line
-# example for generating gprof output:
-#   make coils 'COPTS=-pg' 'LOPTS=-pg'
-
-#LNKOPT=-no-ipo  #-cxxlib-gcc #-i-static -static #-nodefaultlibs
-
 #INC_FFTW = -I $(FFTWDIR)/include 
 
 #LIB_LAPACK= -llapack 
 #LIB_FFTW = -L$(FFTWDIR)/lib -lfftw3 
-
-
-#LIB_LSODE= -L$(LSODEDIR) -llsode
-#LSODEDIR = /home/rs2015/lsode
 #FFTWDIR = /home/rs2015/fftw-3.0.1
 
 
-# do we need -lircmt?
-#LIB_FORTRAN = -lfio -lblas -lf77math -lf90math -L/usr/local/intel/fc/9.0/lib -lifcore -lifcoremt -lcxa -lcprts -lunwind -lirc  -lsvml -lompstub -limf  -lcxaguard -lifport -lguide -lguide_stats 
-#LIB_FORTRAN = -L/usr/local/intel/fc/9.0/lib -lifcore
-
-
-#LIBS_C =  -L/usr/local/intel/cc/9.0/lib $(LIB_COOLL) 
 #LIBS_FIELD = $(LIB_LSODE)  $(LIB_NAG) $(LIB_FORTRAN)
 
 
@@ -78,48 +71,50 @@ FC = gfortran
 #EXEC_OTHER = garabedian2sincos garabedian2sincosII  garabedian_current2sincos
 #EXEC_TEMP = temp
 
-#EXEC = $(EXEC_MAIN) $(EXEC_MAIN_FFT)  $(EXEC_AUXILIARY) $(EXEC_OTHER) 
 
-EXEC = 
+EXEC_ODEPACK=test_odepack
+EXEC = $(EXEC_ODEPACK)
 
-TESTS = 
-
-CPROGS = 
-
+TESTS = test_odepack
 
 #prevent any default rules from being used
 .SUFFIXES:
 
 # don't delete .o files
-.PRECIOUS: %.o calcBtraj_% calcBtrajfromCoils_% calcBonsurf_% calcBonsurffromCoils_% 
+.PRECIOUS: %.o
+
+#calcBtraj_% calcBtrajfromCoils_% calcBonsurf_% calcBonsurffromCoils_% 
+
 
 all: $(EXEC)
-
 
 tests: $(TESTS)
 
 clean:
 	@command rm -f *.o
+	@command rm -f *~
 	@command rm -f $(EXEC)
 	@command rm -f $(TESTS)
 	@command rm -f core.*
-	@command rm calcBtraj_* calcBtrajfromCoils_* calcBonsurf_* calcBonsurffromCoils_* 
+
+fullpurge:
+	@cd $(COILDES_DIR) && make clean
+	@cd $(COILDES_DIR)/src && make clean
+	@cd $(COILDES_DIR)/bin && make clean
+	@cd $(COILDES_DIR)/bin && make clean
+	@cd matricks && ./deconfigure
+	@cd $(DIR_ODEPACK) && make clean
+
 def:
 	echo "nothing done"
 
 
-$(LIBFILE_MATRICKS):
-	cd matricks && ./configure
 
-$(LIBFILE_ODEPACK):  $(DIR_ODEPACK)/opkda1.o  $(DIR_ODEPACK)/opkda2.o  $(DIR_ODEPACK)/opkdmain.o  
-	@echo "building ODEPACK library..."
-	cd $(DIR_ODEPACK) && ar rUuv libodepack.a $(^F)
-
-%.o: %.f
+%.o: %.f 
 	$(FC) -c $*.f -o $*.o
 
 
-%.o: %.cpp coils.hpp $(LIBFILE_MATRICKS)
+%.o: %.cpp 
 ifdef CAREFUL
 	$(CPPC) $(CPPFLAGS) -D"MATRICKS_CAREFUL=1" -c $*.cpp -o $@
 else
@@ -129,6 +124,13 @@ endif
 
 %: %.o 
 	$(CPPC) $(LDFLAGS) $*.o -o $@ $(LIBS) 
+
+$(LIBFILE_MATRICKS): 
+	cd matricks && ./configure
+
+$(LIBFILE_ODEPACK):  $(DIR_ODEPACK)/opkda1.o  $(DIR_ODEPACK)/opkda2.o  $(DIR_ODEPACK)/opkdmain.o  
+	@echo "building ODEPACK library..."
+	cd $(DIR_ODEPACK) && ar rUuv libodepack.a $(^F)
 
 calc_%: calcBtraj_% calcBtrajfromCoils_% calcBonsurf_% calcBonsurffromCoils_% 
 	@echo
@@ -356,7 +358,8 @@ calcBtrajfromCoils_%: bfield_plasma_%.o bfield_coils.o calcBtrajfromCoils.o coil
 	$(LNK) $(LDFLAGS) $^ -o $@  $(LIBS_C) $(LIBS_FIELD)
 
 
-#temp executable for trying stuff out
+# EXEC_ODEPACK
+# temp executable for trying stuff out
 test_odepack: test_odepack.o  $(LIBFILE_ODEPACK)
 	$(LNK) $(LDFLAGS) $^ -o $@ $(LIBS_C) $(LNKOPT_FORTRAN)
 
