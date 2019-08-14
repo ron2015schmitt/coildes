@@ -8,8 +8,8 @@ COILDES_BIN=${COILDES_DIR}/bin
 
 
 # ODEPACK stuff
-DIR_ODEPACK=${COILDES_DIR}/odepack/src
-rm -fr ${DIR_ODEPACK}/Makefile
+rm -fr ${COILDES_DIR}/src/{opkda1.f,opkda2.f,opkdmain.f,LSODE.f} 
+
 
 
 

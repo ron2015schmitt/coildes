@@ -10,7 +10,7 @@ echo "COILDES_DIR = ${COILDES_DIR}"
 
 # ODEPACK stuff
 DIR_ODEPACK=${COILDES_DIR}/odepack/src
-cp ${DIR_ODEPACK}/{opkda1.f,opkda2.f,opkdmain.f,demo/LSODE.f} ${COILDES_DIR}/src/
+cp ${DIR_ODEPACK}/{opkda1.f,opkda2.f,opkdmain.f,demos/LSODE.f} ${COILDES_DIR}/src/
 
 
 echo " "
