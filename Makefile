@@ -132,9 +132,10 @@ fullpurge:
 	@cd $(DIR_COILDES) && make clean
 	@cd $(DIR_COILDES)/src && make clean
 	@cd $(DIR_COILDES)/bin && make clean
-	@echo $(DIR_MATRICKS)
+	@make --makefile $(DIR_COILDES)/Makefile --directory $(DIR_ODEPACK) clean
+	@echo "run $(DIR_MATRICKS)/deconfigure ..."
 	@cd $(DIR_MATRICKS) && ./deconfigure
-#	@cd $(DIR_ODEPACK) && make clean
+
 
 def:
 	echo "nothing done"

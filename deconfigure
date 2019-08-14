@@ -2,5 +2,15 @@
 
 make fullpurge
 
+COILDES_DIR=`pwd`
+COILDES_BIN=${COILDES_DIR}/bin
+#echo " "
+
+
+# ODEPACK stuff
+DIR_ODEPACK=${COILDES_DIR}/odepack/src
+rm -fr ${DIR_ODEPACK}/Makefile
+
+
 
 
