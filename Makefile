@@ -96,37 +96,13 @@ $(LIBFILE_ODEPACK):  $(DIR_ODEPACK)/opkda1.o  $(DIR_ODEPACK)/opkda2.o  $(DIR_ODE
 	@echo "building ODEPACK library..."
 	cd $(DIR_ODEPACK) && ar rUuv libodepack.a $(^F)
 
-
-###########################################################
-# EXEC_ODEPACK
-###########################################################
-
-
-test_odepack: test_odepack.o  $(LIBFILE_ODEPACK)
-	$(LNK) $(LDFLAGS) $^ -o $@ $(LIBS_C) $(LNKOPT_FORTRAN)
-
-EXEC_ODEPACK += test_odepack
-EXEC += $(EXEC_ODEPACK)
-TESTS += test_odepack
-
-
-
-
-
-###########################################################
-# EXEC
-###########################################################
-
-all: $(EXEC)
-
-tests: $(TESTS)
-
 clean:
 	@command rm -f *.o
 	@command rm -f *~
 	@command rm -f $(EXEC)
 	@command rm -f $(TESTS)
 	@command rm -f core.*
+
 
 fullpurge:
 	@cd $(DIR_COILDES) && make clean
