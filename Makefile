@@ -10,21 +10,21 @@ BOLDOFF:='\e[0m'
 
 
 # this resides in the bin subdirectory
-COILDES_DIR:=$(shell coildesdir)
-ifndef COILDES_DIR
+DIR_COILDES:=$(shell coildesdir)
+ifndef DIR_COILDES
 $(error PATH is not set properly. Refer to coildes configuration instructions.)
 endif
 
 
 NAME_MATRICKS = matricks
-DIR_MATRICKS = $(COILDES_DIR)/matricks
+DIR_MATRICKS = $(DIR_COILDES)/matricks
 INC_MATRICKS = -I $(DIR_MATRICKS) 
 LIB_MATRICKS = -L$(DIR_MATRICKS) -l$(NAME_MATRICKS)
 LIBFILE_MATRICKS = $(DIR_MATRICKS)/lib$(NAME_MATRICKS).a
 
 
 NAME_ODEPACK = odepack
-DIR_ODEPACK = $(COILDES_DIR)/odepack/src
+DIR_ODEPACK = $(DIR_COILDES)/odepack/src
 INC_ODEPACK = -I $(DIR_ODEPACK) 
 LIB_ODEPACK = -L$(DIR_ODEPACK) -l$(NAME_ODEPACK)
 LIBFILE_ODEPACK = $(DIR_ODEPACK)/lib$(NAME_ODEPACK).a
@@ -129,12 +129,12 @@ clean:
 	@command rm -f core.*
 
 fullpurge:
-	@cd $(COILDES_DIR) && make clean
-	@cd $(COILDES_DIR)/src && make clean
-	@cd $(COILDES_DIR)/bin && make clean
-	@cd $(COILDES_DIR)/bin && make clean
-	@cd matricks && ./deconfigure
-	@cd $(DIR_ODEPACK) && make clean
+	@cd $(DIR_COILDES) && make clean
+	@cd $(DIR_COILDES)/src && make clean
+	@cd $(DIR_COILDES)/bin && make clean
+	@echo $(DIR_MATRICKS)
+	@cd $(DIR_MATRICKS) && ./deconfigure
+#	@cd $(DIR_ODEPACK) && make clean
 
 def:
 	echo "nothing done"
