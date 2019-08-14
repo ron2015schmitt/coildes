@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+BOLDON='\e[1m'
+BOLDOFF='\e[0m'
+
 echo " "
 echo "configuring coildes ..."              
 
@@ -8,18 +15,15 @@ COILDES_BIN=${COILDES_DIR}/bin
 echo " "
 echo "COILDES_DIR = ${COILDES_DIR}"
 
-# ODEPACK stuff
-DIR_ODEPACK=${COILDES_DIR}/odepack/src
-cp ${DIR_ODEPACK}/{opkda1.f,opkda2.f,opkdmain.f,demos/LSODE.f} ${COILDES_DIR}/src/
+echo " "
 
+echo -e "${BOLDON}Required Actions${BOLDOFF}: "
+echo -e "${BOLDON}1.${BOLDOFF} Add the following line to your profile, eg ~/.profile"
+echo -e "${CYAN}PATH=\"${COILDES_BIN}:\$PATH\"${NC}"
 
 echo " "
-echo "Add the following line to your profile, eg ~/.profile"
-echo "PATH=\"${COILDES_BIN}:\$PATH\""
-
-echo " "
-echo "Then source your profile "
-echo "source ~/.profile"
+echo -e "${BOLDON}2.${BOLDOFF} Then source your profile "
+echo -e "${CYAN}source ~/.profile${NC}"
 echo " "
 echo "done."              
 

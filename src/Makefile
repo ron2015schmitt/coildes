@@ -21,6 +21,6 @@ TESTS += test_odepack
 # EXEC
 ###########################################################
 
-all: $(EXEC)
+exec: $(EXEC)
 
 tests: $(TESTS)

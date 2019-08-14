@@ -2,13 +2,7 @@
 
 make fullpurge
 
-COILDES_DIR=`pwd`
-COILDES_BIN=${COILDES_DIR}/bin
-#echo " "
 
-
-# ODEPACK stuff
-rm -fr ${COILDES_DIR}/src/{opkda1.f,opkda2.f,opkdmain.f,LSODE.f} 
 
 
 
